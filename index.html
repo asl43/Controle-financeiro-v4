@@ -9,36 +9,32 @@
 <style>
 /* VARIÁVEIS DE COR E TEMA */
 :root {
-    /* NOVO TEMA VIBRANTE */
-    --bg-dark: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-    --bg-light: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-    --card-bg-dark: rgba(42, 42, 62, 0.8); /* Cor de fundo escura com transparência */
-    --card-bg-light: rgba(255, 255, 255, 0.95); /* Cor de fundo clara com transparência */
+    --bg-dark: linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);
+    --bg-light: linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);
+    --card-bg-dark: linear-gradient(135deg,rgba(42,42,62,0.95) 0%,rgba(31,31,46,0.95) 100%);
+    --card-bg-light: linear-gradient(135deg,#ffffff 0%,#f8f9fa 100%);
     --text-color-dark: #e0e0e0;
-    --text-color-light: #2d3748;
+    --text-color-light: #333333;
     --header-color-dark: #fff;
-    --header-color-light: #1a202c;
+    --header-color-light: #4a90e2;
     --input-bg-dark: rgba(255,255,255,0.08);
-    --input-bg-light: rgba(255,255,255,0.9);
-    --input-border-dark: rgba(255,255,255,0.15);
-    --input-border-light: rgba(0,0,0,0.1);
+    --input-bg-light: #ffffff;
+    --input-border-dark: rgba(255,255,255,0.25);
+    --input-border-light: #dddddd;
     --table-header-bg-dark: rgba(255,255,255,0.08);
-    --table-header-bg-light: #f7fafc;
+    --table-header-bg-light: #f5f5f5;
     --table-row-hover-dark: rgba(255,255,255,0.08);
-    --table-row-hover-light: #edf2f7;
-    --primary-color: #667eea; /* Indigo Pastel / Azul Elétrico */
-    --pagar-color: #f093fb; /* Rosa Neon */
-    --receber-color: #4facfe; /* Azul Ciano */
-    --vencido-color: #fa709a; /* Rosa Quente */
-    --meta-color: #a8edea; /* Verde Menta */
-    --warning-color: #feca57; /* Amarelo Laranja */
-    --sobra-color: #1dd1a1; /* Verde Turquesa */
-    --falta-color: #ee5a6f; /* Vermelho Suave */
+    --table-row-hover-light: #f0f0f0;
+    --primary-color: #667eea;
+    --pagar-color: #f093fb;
+    --receber-color: #4facfe;
+    --vencido-color: #fa709a;
+    --meta-color: #a18cd1;
+    --warning-color: #fbc531;
+    --sobra-color: #00d2ff;
+    --falta-color: #ee5a6f;
     --fab-color: #667eea;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 16px rgba(0,0,0,0.15);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.2);
-    --shadow-xl: 0 16px 48px rgba(0,0,0,0.25);
+    --qr-color: #764ba2;
 }
 
 /* TEMA CLARO */
@@ -76,13 +72,6 @@ header h1 {
   justify-content:center;
   gap:15px;
 }
-/* 1. Animação no Título (Ícone de Dinheiro) */
-@keyframes coin-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); color: var(--warning-color); } }
-.header-icon {
-    font-size: 1.2em;
-    animation: coin-pulse 4s infinite ease-in-out;
-    display: inline-block;
-}
 
 /* Estilos para o botão de tema */
 .theme-toggle-btn {
@@ -100,7 +89,7 @@ header h1 {
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-/* Estilos para o FAB (Floating Action Button) */
+/* Estilos para o FAB (Floating Action Button) - Sugestão 25 */
 .fab-container {
     position: fixed;
     bottom: 20px;
@@ -116,14 +105,14 @@ header h1 {
     font-size: 2em;
     border: none;
     cursor: pointer;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     transition: transform 0.3s ease, background 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .fab-btn:hover {
-    background: #4a5fe0; /* Um tom mais escuro de --primary-color */
+    background: #455be9; /* Um pouco mais escuro que o fab-color */
     transform: scale(1.05);
 }
 .quick-menu {
@@ -149,23 +138,14 @@ header h1 {
     border-radius: 10px;
     font-size: 0.9em;
     font-weight: 600;
-    box-shadow: var(--shadow-sm);
-    border: none; /* Adicionado para consistência */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 .quick-menu .btn-pagar {
     background: var(--pagar-color);
-    color: var(--text-color-light); /* Cor do texto mais visível no rosa claro */
-}
-.quick-menu .btn-pagar:hover { /* 4. Melhoria do FAB (UX) */
-    background: linear-gradient(135deg, #f093fb, #e348f3);
-    color: var(--text-color-light); 
+    color: white;
 }
 .quick-menu .btn-receber {
     background: var(--receber-color);
-    color: white;
-}
-.quick-menu .btn-receber:hover { /* 4. Melhoria do FAB (UX) */
-    background: linear-gradient(135deg, #4facfe, #2e70e3);
     color: white;
 }
 
@@ -182,21 +162,14 @@ header h1 {
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    transition: opacity 0.3s ease; /* 6. UX do Login (Animação) */
 }
 .login-box {
     background: var(--card-bg-dark);
     padding: 40px;
     border-radius: 16px;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     text-align: center;
     min-width: 350px;
-    backdrop-filter: blur(10px); 
-    transform: scale(0.95); /* 6. UX do Login (Animação) */
-    transition: transform 0.3s ease;
-}
-.login-overlay.visible .login-box {
-    transform: scale(1);
 }
 .login-box h2 {
     color: var(--header-color-dark);
@@ -215,17 +188,16 @@ header h1 {
 .login-box button {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(135deg, var(--primary-color), #4e54c8); /* Gradient com base na primary */
+    background: linear-gradient(135deg, var(--primary-color), #455be9);
     color: white;
     border: none;
     border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
     font-size: 1em;
-    box-shadow: var(--shadow-sm);
 }
 .erro-senha {
-    color: var(--pagar-color);
+    color: var(--falta-color);
     margin-top: 15px;
     font-weight: 600;
 }
@@ -241,9 +213,8 @@ header h1 {
 }
 
 .sync-status {
-  /* Cores ajustadas para o novo esquema */
-  background:rgba(79,172,254,0.2); 
-  border:1px solid rgba(79,172,254,0.5);
+  background:rgba(79,175,254,0.2);
+  border:1px solid rgba(79,175,254,0.5);
   color:var(--receber-color);
   padding:10px 15px;
   border-radius:10px;
@@ -255,7 +226,6 @@ header h1 {
   width:fit-content;
   margin-left:auto;
   margin-right:auto;
-  box-shadow: var(--shadow-sm);
 }
 .sync-status.offline {
   background:rgba(240,147,251,0.2);
@@ -285,19 +255,18 @@ header h1 {
   background:var(--card-bg-dark);
   border-radius:16px; 
   padding:25px; 
-  box-shadow:var(--shadow-lg); /* Usando nova variável de sombra */
+  box-shadow:0 10px 40px rgba(0,0,0,0.3);
   border:1px solid rgba(255,255,255,0.1);
-  transition:transform 0.3s ease,box-shadow 0.3s ease, background 0.5s, border-color 0.3s ease; /* 9. Animação em Cards */
+  transition:transform 0.3s ease,box-shadow 0.3s ease, background 0.5s;
   backdrop-filter:blur(10px);
 }
 html[data-theme="light"] .card {
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     border: 1px solid #eeeeee;
 }
 .card:hover { 
   transform:translateY(-5px); 
-  box-shadow:var(--shadow-xl);
-  border-color: var(--primary-color); /* 9. Animação em Cards - Border Glow */
+  box-shadow:0 15px 50px rgba(0,0,0,0.4);
 }
 .card-label { 
   font-size:0.9em; 
@@ -322,10 +291,7 @@ html[data-theme="light"] .card {
 .card-falta .card-value { color:var(--falta-color); }
 
 .card-meta { position: relative; cursor: pointer; }
-.card-meta:hover { 
-    border-color: var(--meta-color); 
-    box-shadow: 0 0 15px var(--meta-color); /* 9. Animação em Cards - Meta Glow */
-}
+.card-meta:hover { border-color: var(--meta-color); }
 .card-meta .edit-hint {
     position: absolute;
     top: 10px;
@@ -371,17 +337,15 @@ html[data-theme="light"] .card {
   background:var(--card-bg-dark);
   border-radius:16px; 
   padding:25px; 
-  box-shadow:var(--shadow-lg);
+  box-shadow:0 10px 40px rgba(0,0,0,0.3);
   border:1px solid rgba(255,255,255,0.1);
   transition: background 0.5s;
-  backdrop-filter:blur(10px);
 }
 html[data-theme="light"] .form-section, 
 html[data-theme="light"] .chart-section, 
 html[data-theme="light"] .table-section {
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     border: 1px solid #eeeeee;
-    backdrop-filter: blur(5px);
 }
 .form-section h2, .chart-section h2, .table-section h2 { 
   font-size:1.4em; 
@@ -414,12 +378,11 @@ html[data-theme="light"] input,
 html[data-theme="light"] select {
     color: var(--text-color-light);
 }
-/* 2. Melhoria no Design dos Inputs */
-input:focus, select:focus, input:hover, select:hover { 
+input:focus, select:focus { 
   outline:none;
   border-color:var(--primary-color);
-  background:rgba(102,126,234,0.15); 
-  box-shadow:0 0 10px rgba(102,126,234,0.5);
+  background:rgba(102,126,234,0.1);
+  box-shadow:0 0 20px rgba(102,126,234,0.3);
 }
 button { 
   padding:12px 24px; 
@@ -431,7 +394,7 @@ button {
   transition:all 0.3s ease;
 }
 .btn-primary { 
-  background:linear-gradient(135deg,var(--primary-color) 0%,#4e54c8 100%);
+  background:linear-gradient(135deg,var(--primary-color) 0%,#455be9 100%);
   color:white; 
   width:100%; 
 }
@@ -440,35 +403,34 @@ button {
   box-shadow:0 8px 25px rgba(102,126,234,0.4);
 }
 .btn-danger { 
-  background:linear-gradient(135deg,var(--vencido-color) 0%,#e83a59 100%);
+  background:linear-gradient(135deg,var(--vencido-color) 0%,#d34c6e 100%);
   color:white; 
   font-size:0.9em;
   padding:8px 16px;
 }
 .btn-edit { 
-  background:linear-gradient(135deg,var(--receber-color) 0%,#2e70e3 100%);
+  background:linear-gradient(135deg,var(--receber-color) 0%,#3d8fd8 100%);
   color:white; 
   font-size:0.9em;
   padding:8px 16px;
 }
 /* Novo botão para Pagamento Parcial */
 .btn-partial {
-    background: linear-gradient(135deg, var(--warning-color) 0%, #e67e22 100%);
-    color: var(--text-color-light); 
+    background: linear-gradient(135deg, var(--warning-color) 0%, #d89f1f 100%);
+    color: white; 
     font-size: 0.85em;
     padding: 8px 10px;
 }
 .btn-filter {
-  background:linear-gradient(135deg,var(--meta-color) 0%,#87e0d8 100%);
-  color:var(--text-color-light); /* Texto escuro no fundo claro */
+  background:linear-gradient(135deg,#fbc531 0%,#e19812 100%);
+  color:white;
   padding:10px 20px;
   margin-bottom:0; 
   font-size:0.95em;
   width: auto;
 }
 .btn-filter.active {
-  background:linear-gradient(135deg,var(--pagar-color) 0%,#e348f3 100%);
-  color:white;
+  background:linear-gradient(135deg,var(--pagar-color) 0%,#a176e0 100%);
 }
 .search-bar { margin-bottom:15px; }
 .search-bar input { width:100%; }
@@ -508,19 +470,19 @@ tr:hover { background:var(--table-row-hover-dark); }
   border:1px solid rgba(240,147,251,0.5);
 }
 .badge-receber { 
-  background:rgba(79,172,254,0.2); 
+  background:rgba(79,175,254,0.2); 
   color:var(--receber-color); 
-  border:1px solid rgba(79,172,254,0.5);
+  border:1px solid rgba(79,175,254,0.5);
 }
 .badge-pendente { 
-  background:rgba(254,202,87,0.2); 
+  background:rgba(251,197,49,0.2); 
   color:var(--warning-color); 
-  border:1px solid rgba(254,202,87,0.5);
+  border:1px solid rgba(251,197,49,0.5);
 }
 .badge-pago { 
-  background:rgba(79,172,254,0.2); 
+  background:rgba(79,175,254,0.2); 
   color:var(--receber-color); 
-  border:1px solid rgba(79,172,254,0.5);
+  border:1px solid rgba(79,175,254,0.5);
 }
 
 .status-filters {
@@ -558,17 +520,17 @@ tr:hover { background:var(--table-row-hover-dark); }
 }
 .status-filter-btn.filter-pendente.active {
     border-color: var(--warning-color);
-    background: rgba(254,202,87,0.2);
+    background: rgba(251,197,49,0.2);
     color: var(--warning-color);
 }
 .status-filter-btn.filter-pago.active {
     border-color: var(--receber-color);
-    background: rgba(79,172,254,0.2);
+    background: rgba(79,175,254,0.2);
     color: var(--receber-color);
 }
 .status-filter-btn.filter-recebido.active {
     border-color: var(--receber-color);
-    background: rgba(79,172,254,0.2);
+    background: rgba(79,175,254,0.2);
     color: var(--receber-color);
 }
 .status-filter-btn.filter-pagar.active {
@@ -578,7 +540,7 @@ tr:hover { background:var(--table-row-hover-dark); }
 }
 .status-filter-btn.filter-receber.active {
     border-color: var(--receber-color);
-    background: rgba(79,172,254,0.2);
+    background: rgba(79,175,254,0.2);
     color: var(--receber-color);
 }
 .filter-count {
@@ -592,17 +554,14 @@ tr:hover { background:var(--table-row-hover-dark); }
 .actions { 
   display:flex; 
   gap:8px;
-  flex-wrap: wrap; 
+  flex-wrap: wrap; /* Permite quebrar em telas pequenas */
 }
-/* 7. UX da Tabela (Filtros) - Melhoria Flexbox */
 .filter-controls {
     display:flex; 
     gap:10px; 
     margin-bottom:15px; 
     flex-wrap:wrap; 
     align-items:flex-end;
-    /* Adicionado: Força a quebra de linha em telas menores */
-    justify-content: space-between; 
 }
 .filter-item {
     min-width:150px;
@@ -612,13 +571,6 @@ tr:hover { background:var(--table-row-hover-dark); }
     flex: 2;
     min-width: 250px;
 }
-/* Adicionado: Garantindo que elementos grandes não quebrem o layout */
-.filter-item, .filter-item-large, .btn-filter, .btn-primary.export-btn {
-    flex-grow: 1;
-    min-width: 150px; /* Garante tamanho mínimo para o item */
-}
-
-
 .filter-summary {
     background: rgba(102,126,234,0.1);
     border: 1px solid var(--primary-color);
@@ -647,7 +599,7 @@ tr:hover { background:var(--table-row-hover-dark); }
     color: #b0b0b0;
 }
 .star {
-    color: var(--warning-color); /* Estrela amarela */
+    color: #fbc531;
 }
 
 /* Novo: Estilos para Metas por Categoria */
@@ -727,95 +679,9 @@ tr:hover { background:var(--table-row-hover-dark); }
     font-size: 0.75em;
 }
 .day-has-events {
-    box-shadow: 0 0 10px rgba(102,126,234,0.5); /* Sombra baseada na primary */
+    box-shadow: 0 0 10px rgba(102,126,234,0.5);
     border-color: var(--primary-color);
 }
-
-/* Novo: Estilos para Modal (Edição de Meta) - Sugestão 5 */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9998;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-.modal-overlay.open {
-    opacity: 1;
-    visibility: visible;
-}
-.modal-content {
-    background: var(--card-bg-dark);
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: var(--shadow-xl);
-    width: 90%;
-    max-width: 450px;
-    transform: translateY(-50px);
-    transition: transform 0.3s ease;
-    backdrop-filter: blur(15px);
-}
-.modal-overlay.open .modal-content {
-    transform: translateY(0);
-}
-.modal-content h3 {
-    color: var(--header-color-dark);
-    margin-bottom: 20px;
-}
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-}
-.modal-footer button {
-    width: auto;
-    padding: 10px 20px;
-}
-
-/* Novo: Tooltip para Calendário - Sugestão 10 */
-.calendar-tooltip {
-    position: absolute;
-    bottom: 100%; /* Acima do elemento */
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--card-bg-dark);
-    color: var(--text-color-dark);
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 0.8em;
-    white-space: pre-wrap;
-    z-index: 10;
-    box-shadow: var(--shadow-md);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    width: max-content;
-    max-width: 250px;
-    border: 1px solid var(--primary-color);
-}
-.calendar-day:hover .calendar-tooltip {
-    opacity: 1;
-}
-/* Estilizando o triângulo (cuidado com ele em modo light) */
-.calendar-tooltip::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: var(--card-bg-dark) transparent transparent transparent;
-}
-
 
 /* Novo: Modo Compacto/Expandido (apenas toggle visual para a tabela) */
 .table-compact td {
@@ -831,13 +697,6 @@ tr:hover { background:var(--table-row-hover-dark); }
 }
 
 
-@media(max-width:1024px){
-    /* 8. Responsividade (Gráficos) - Ajuste para telas médias */
-    .chart-section canvas { min-height: 250px; }
-    .triple-grid { grid-template-columns: 1fr 1fr; }
-    .content { grid-template-columns: 1fr; }
-}
-
 @media(max-width:768px){
   .content{ grid-template-columns:1fr; }
   .triple-grid { grid-template-columns: 1fr; }
@@ -845,15 +704,7 @@ tr:hover { background:var(--table-row-hover-dark); }
   .card-value { font-size:1.5em; }
   table { font-size:0.9em; }
   th, td { padding:10px 5px; }
-  /* 7. UX da Tabela (Filtros) - Garante que os controles fiquem em colunas */
-  .filter-controls {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
-  .filter-item-large {
-      grid-column: 1 / -1; /* Ocupa a largura total */
-  }
-  .filter-controls > button {
+  .filter-controls > div {
       min-width: 100%;
   }
   .status-filters {
@@ -874,62 +725,6 @@ tr:hover { background:var(--table-row-hover-dark); }
 
 <button class="theme-toggle-btn" onclick="toggleTheme()">☀️ Modo Diurno</button>
 
-<div class="modal-overlay" id="metaModal">
-    <div class="modal-content">
-        <h3 id="modalTitle">Editar Meta</h3>
-        <input type="hidden" id="modalMetaType">
-
-        <div id="modalContentGlobal" style="display:none;">
-            <div class="form-group">
-                <label for="modalMetaTipo">Tipo de Meta</label>
-                <select id="modalMetaTipo">
-                    <option value="diario">Diária</option>
-                    <option value="mensal">Mensal</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="modalMetaValor">Valor da Meta (R$)</label>
-                <input type="number" id="modalMetaValor" step="0.01" placeholder="Ex: 5000.00">
-            </div>
-        </div>
-
-        <div id="modalContentCategory" style="display:none;">
-            <div class="form-group">
-                <label for="modalCategorySelect">Categoria</label>
-                <select id="modalCategorySelect">
-                    <option value="Alimentação">Alimentação</option>
-                    <option value="Moradia/Aluguel">Moradia/Aluguel</option>
-                    <option value="Transporte">Transporte</option>
-                    <option value="Lazer">Lazer</option>
-                    <option value="Saúde">Saúde</option>
-                    <option value="Educação">Educação</option>
-                    <option value="Outros">Outros</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="modalCategoryValor">Valor da Meta Mensal (R$)</label>
-                <input type="number" id="modalCategoryValor" step="0.01" placeholder="0 para remover">
-            </div>
-        </div>
-
-        <div id="modalContentObjetivo" style="display:none;">
-            <div class="form-group">
-                <label for="modalObjetivoValor">Valor Total do Objetivo (R$)</label>
-                <input type="number" id="modalObjetivoValor" step="0.01" placeholder="Ex: 10000.00">
-            </div>
-            <div class="form-group">
-                <label for="modalObjetivoMeses">Prazo em Meses</label>
-                <input type="number" id="modalObjetivoMeses" min="1" placeholder="Ex: 12">
-            </div>
-        </div>
-
-        <div class="modal-footer">
-            <button class="btn-danger" onclick="fecharModalMeta()">Cancelar</button>
-            <button class="btn-primary" onclick="salvarMeta()">Salvar</button>
-        </div>
-    </div>
-</div>
-
 <div class="login-overlay" id="loginOverlay">
   <div class="login-box">
     <h2>🔐 Acesso Restrito</h2>
@@ -942,7 +737,8 @@ tr:hover { background:var(--table-row-hover-dark); }
 
 <div class="container" id="mainContainer" style="display:none;">
 <header>
-<h1><span class="header-icon">💸</span> Controle Financeiro</h1> <div class="sync-status" id="syncStatus">
+<h1>💰 Controle Financeiro</h1>
+<div class="sync-status" id="syncStatus">
   <div class="dot"></div>
   <span id="syncText">Sincronizado</span>
 </div>
@@ -962,7 +758,7 @@ tr:hover { background:var(--table-row-hover-dark); }
         <div style="font-size: 0.8em; margin-top: 8px; color: #b0b0b0;">Média 3M: <span id="media3Meses">R$ 0,00</span></div>
     </div>
     
-    <div class="card card-meta" onclick="abrirModalMeta('global')">
+    <div class="card card-meta" onclick="editarMeta('global')">
         <div class="edit-hint">✏️ Clique para editar</div>
         <div class="card-label" id="metaLabel">Meta de Gastos (Mês)</div>
         <div class="card-value" id="metaValor">R$ 0,00</div>
@@ -999,7 +795,7 @@ tr:hover { background:var(--table-row-hover-dark); }
 </div>
 
 <div class="form-group">
-    <label for="categoria">Categoria</label>
+    <label for="categoria">Categoria (Sugestão 8: Metas por Categoria)</label>
     <select id="categoria" required>
         <option value="">Selecione a Categoria</option>
         <option value="Salário/Renda">Salário/Renda</option>
@@ -1044,7 +840,7 @@ tr:hover { background:var(--table-row-hover-dark); }
 </div>
 
 <div class="form-group">
-<label for="conta">Conta/Carteira</label>
+<label for="conta">Conta/Carteira (Sugestão 6 - Simplificada)</label>
 <select id="conta">
     <option value="Conta Corrente">Conta Corrente</option>
     <option value="Poupança">Poupança</option>
@@ -1068,8 +864,10 @@ tr:hover { background:var(--table-row-hover-dark); }
 
 <div class="chart-section">
 <h2>📊 Gastos por Categoria (Pendentes)</h2>
-<canvas id="graficoTipo" style="min-height: 250px;"></canvas> <div class="category-progress-container">
-    <h3 style="font-size: 1.1em; margin-bottom: 15px; color: var(--meta-color);">Metas de Gastos por Categoria (<span style="cursor:pointer;" onclick="abrirModalMeta('category')">✏️</span>)</h3>
+<canvas id="graficoTipo"></canvas>
+
+<div class="category-progress-container">
+    <h3 style="font-size: 1.1em; margin-bottom: 15px; color: var(--meta-color);">Metas de Gastos por Categoria</h3>
     <div id="categoryMetasSummary">
         <div style="text-align: center; color: #b0b0b0;">Defina metas ao lado.</div>
     </div>
@@ -1081,13 +879,15 @@ tr:hover { background:var(--table-row-hover-dark); }
 <div class="content triple-grid">
     <div class="chart-section">
         <h2>📈 Fluxo de Caixa (Entradas vs Saídas)</h2>
-        <canvas id="graficoFluxoCaixa" style="min-height: 250px;"></canvas> </div>
+        <canvas id="graficoFluxoCaixa"></canvas>
+    </div>
 
     <div class="chart-section">
         <h2>📉 Comparativo Mensal (Mês Atual vs Anterior)</h2>
-        <canvas id="graficoComparativoMensal" style="min-height: 250px;"></canvas> </div>
+        <canvas id="graficoComparativoMensal"></canvas>
+    </div>
 
-    <div class="chart-section card-meta" onclick="abrirModalMeta('objetivo')" style="cursor: pointer;">
+    <div class="chart-section card-meta" onclick="editarMeta('objetivo')" style="cursor: pointer;">
         <div class="edit-hint">✏️ Clique para editar</div>
         <h2>🎯 Objetivo de Economia/Investimento</h2>
         <div id="objetivoCardContent">
@@ -1130,7 +930,8 @@ tr:hover { background:var(--table-row-hover-dark); }
     </button>
 </div>
     
-<div class="filter-controls"> <div class="filter-item-large">
+<div class="filter-controls">
+    <div class="filter-item-large">
         <label for="buscar" style="margin-bottom: 5px; font-size: 0.8em; color:var(--primary-color);">Buscar Texto/Avançado</label>
         <input type="text" id="buscar" placeholder="🔍 Descrição, data, tipo ou conta..." style="width:100%; padding:12px 15px; border-radius:10px;">
     </div>
@@ -1190,14 +991,14 @@ tr:hover { background:var(--table-row-hover-dark); }
         <input type="date" id="dataFim" style="padding:10px 15px;">
     </div>
     
-    <button class="btn-filter" id="btnFiltrarData" style="height: 45px; align-self:flex-end;">Filtrar Customizado</button>
+    <button class="btn-filter" id="btnFiltrarData" style="min-width:120px; height: 45px; padding:10px 20px; align-self:flex-end;">Filtrar Customizado</button>
     
-    <button class="btn-filter" id="btnFiltrarFav" style="height: 45px; align-self:flex-end;">⭐ Apenas Favoritos</button>
+    <button class="btn-filter" id="btnFiltrarFav" style="height: 45px; padding:10px 20px; align-self:flex-end;">⭐ Apenas Favoritos</button>
     
-    <button class="btn-primary" onclick="toggleCompactMode(this)" style="width: auto; height: 45px; align-self:flex-end; background: #3498db;">↔️ Modo Compacto</button>
+    <button class="btn-primary" onclick="toggleCompactMode(this)" style="width: auto; height: 45px; padding:10px 20px; align-self:flex-end; background: #667eea;">↔️ Modo Compacto</button>
     
-    <button class="btn-primary export-btn" onclick="exportarExcel()" style="width: auto; height: 45px; align-self:flex-end;">📥 Exportar Excel</button>
-    <button class="btn-primary export-btn" onclick="alert('Funcionalidade de PDF Otimizado em desenvolvimento!')" style="width: auto; height: 45px; align-self:flex-end; background: #c0392b;">🖨️ Exportar PDF</button>
+    <button class="btn-primary export-btn" onclick="exportarExcel()" style="width: auto; height: 45px; padding:10px 20px; align-self:flex-end;">📥 Exportar Excel</button>
+    <button class="btn-primary export-btn" onclick="alert('Funcionalidade de PDF Otimizado em desenvolvimento!')" style="width: auto; height: 45px; padding:10px 20px; align-self:flex-end; background: #fa709a;">🖨️ Exportar PDF</button>
 </div>
 
 <div class="filter-summary" id="periodSummary">
@@ -1222,11 +1023,13 @@ tr:hover { background:var(--table-row-hover-dark); }
 <div class="content triple-grid">
     <div class="chart-section">
         <h2>📈 Gastos por Dia (Últimos 7 dias)</h2>
-        <canvas id="graficoDiario" style="min-height: 200px;"></canvas> </div>
+        <canvas id="graficoDiario"></canvas>
+    </div>
 
     <div class="chart-section">
         <h2>📉 Gastos Mensais por Categoria (Últimos 12 meses)</h2>
-        <canvas id="graficoMensal" style="min-height: 200px;"></canvas> </div>
+        <canvas id="graficoMensal"></canvas>
+    </div>
 
     <div class="chart-section">
         <h2>📅 Calendário Financeiro (Mês Atual)</h2>
@@ -1240,7 +1043,7 @@ tr:hover { background:var(--table-row-hover-dark); }
             <div class="calendar-header">Sex</div>
             <div class="calendar-header">Sáb</div>
         </div>
-        <div style="font-size: 0.8em; color: #b0b0b0; margin-top: 15px; text-align: center;">* Passe o mouse no dia para ver detalhes.</div>
+        <div style="font-size: 0.8em; color: #b0b0b0; margin-top: 15px; text-align: center;">* Clique no dia para ver detalhes.</div>
     </div>
 </div>
 
@@ -1304,7 +1107,7 @@ const regrasAutomacao = [
 
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxCkEbskP0tA-4Ii_9v1wS7z2_9yHP0nn-_GroK_Z4paEiurRMz6Iole6902c00FR-Q/exec";
 
-const SENHA_ACESSO = "nanl250612";
+const SENHA_ACESSO = "minhasenha123";
 
 const formatarMoeda = valor => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(valor);
 
@@ -1351,7 +1154,6 @@ function verificarAutenticacao() {
     document.getElementById("mainContainer").style.display = "block";
     document.getElementById("fabContainer").style.display = "block";
   } else {
-    document.getElementById("loginOverlay").style.display = "flex";
     document.getElementById("fabContainer").style.display = "none";
   }
 }
@@ -1565,7 +1367,7 @@ function mostrarRegistros(lista){
 }
 
 function atualizarGraficos(dataList){
-  const fontColor = currentTheme === 'light' ? '#2d3748' : '#e0e0e0';
+  const fontColor = currentTheme === 'light' ? '#333333' : '#e0e0e0';
   const gridColor = currentTheme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
   // FILTROS ATUALIZADOS: Gráficos de Gastos devem usar o status "Pago" (Realizado)
   const gastosRealizados = dataList.filter(r => r.tipo === "Pagar" && r.status === "Pago");
@@ -1590,8 +1392,7 @@ function atualizarGraficos(dataList){
       labels: categoriasLabels,
       datasets:[{
         data: categoriasValores,
-        // Cores do novo tema
-        backgroundColor:['#f093fb','#4facfe','#667eea','#feca57','#a8edea','#fa709a','#1dd1a1','#ee5a6f','#c9cbcf'],
+        backgroundColor:['#f093fb','#4facfe','#667eea','#fbc531','#a18cd1','#fa709a','#00d2ff','#ee5a6f','#c9cbcf'],
         borderColor: currentTheme === 'light' ? '#ffffff' : '#1f1f2e',
         borderWidth:3
       }]
@@ -1647,13 +1448,13 @@ function atualizarGraficos(dataList){
         {
           label: 'Entradas (Recebido)',
           data: mesesFluxo.map(m => dadosFluxo[m].entrada),
-          backgroundColor: '#4facfe', /* Cor base na receber-color */
+          backgroundColor: var(--receber-color),
           stack: 'stack1'
         },
         {
           label: 'Saídas (Pago)',
           data: mesesFluxo.map(m => -dadosFluxo[m].saida), // Valores negativos para despesas
-          backgroundColor: '#f093fb', /* Cor base na pagar-color */
+          backgroundColor: var(--pagar-color),
           stack: 'stack1'
         }
       ]
@@ -1708,12 +1509,12 @@ function atualizarGraficos(dataList){
         {
           label: `Mês Anterior (${mesAnteriorNome})`,
           data: [receitaAnterior, despesaAnterior],
-          backgroundColor: 'rgba(102,126,234, 0.6)' /* Cor base na primary */
+          backgroundColor: 'rgba(102,126,234, 0.6)' 
         },
         {
           label: `Mês Atual (${mesAtualNome})`,
           data: [receitaAtual, despesaAtual],
-          backgroundColor: 'rgba(79,172,254, 0.8)' /* Cor base na receber */
+          backgroundColor: 'rgba(79,175,254, 0.8)' 
         }
       ]
     },
@@ -1760,11 +1561,11 @@ function atualizarGraficos(dataList){
       datasets: [{
         label: 'Gastos Diários (Realizado)',
         data: diasValores,
-        borderColor: '#f093fb', /* Cor base na pagar-color */
-        backgroundColor: 'rgba(240,147,251, 0.1)',
+        borderColor: var(--pagar-color),
+        backgroundColor: 'rgba(240, 147, 251, 0.1)',
         tension: 0.4,
         fill: true,
-        pointBackgroundColor: '#f093fb',
+        pointBackgroundColor: var(--pagar-color),
         pointBorderColor: currentTheme === 'light' ? '#333' : '#fff',
         pointBorderWidth: 2,
         pointRadius: 5
@@ -1814,8 +1615,8 @@ function atualizarGraficos(dataList){
   });
 
   const categoryColors = {
-      "Alimentação": "#f093fb", "Moradia/Aluguel": "#4facfe", "Transporte": "#667eea", 
-      "Lazer": "#feca57", "Saúde": "#a8edea", "Educação": "#fa709a", "Outros": "#c9cbcf"
+      "Alimentação": "#ff6384", "Moradia/Aluguel": "#36a2eb", "Transporte": "#ff9f40", 
+      "Lazer": "#4bc0c0", "Saúde": "#9966ff", "Educação": "#ffcd56", "Outros": "#c9cbcf"
   };
 
   const datasets = categorias.map(cat => ({
@@ -1963,7 +1764,7 @@ document.getElementById("financeForm").addEventListener("submit",function(e){
   const sheetRowId=document.getElementById("sheetRowId").value;
   
   if(row) { // Edição de registro
-    const idx = registros.findIndex(r=>r.row == row); // Uso 'row' para encontrar o índice na lista local
+    const idx = registros.findIndex(r=>r.id == sheetRowId);
     if(idx !== -1) {
       const registroExistente = registros[idx];
       const dadosRegistro = {
@@ -1973,8 +1774,7 @@ document.getElementById("financeForm").addEventListener("submit",function(e){
         // Mantém valorOriginal se já existe, senão seta para null
         valorOriginal: registroExistente.valorOriginal || (registroExistente.valor !== valor ? registroExistente.valor : null) 
       };
-      // O ID da linha na planilha (sheetRowId) é o que importa para a persistência
-      registros[idx]={...registroExistente,...dadosRegistro, row:parseInt(row), id:sheetRowId}; 
+      registros[idx]={...registroExistente,...dadosRegistro, row:parseInt(row)};
       enviarParaPlanilha({...registros[idx], action:'update', campo1: categoria}); // Envia categoria como campo1 para backend
     }
     document.getElementById("row").value="";
@@ -2281,95 +2081,111 @@ function atualizarCardObjetivo() {
     document.getElementById("valorMensalPoupar").innerText = formatarMoeda(valorMensalNecessario) + "/mês";
 }
 
-// 5. Modal para Edição de Meta/Objetivo - Funções de controle
-function abrirModalMeta(type) {
-    const modal = document.getElementById('metaModal');
-    document.getElementById('modalMetaType').value = type;
-    document.getElementById('modalContentGlobal').style.display = 'none';
-    document.getElementById('modalContentCategory').style.display = 'none';
-    document.getElementById('modalContentObjetivo').style.display = 'none';
 
+function editarMeta(type) {
     if (type === 'global') {
-        document.getElementById('modalTitle').innerText = 'Editar Meta de Gastos (Global)';
-        document.getElementById('modalContentGlobal').style.display = 'block';
-        document.getElementById('modalMetaTipo').value = metaTipo;
-        document.getElementById('modalMetaValor').value = metaValor;
-    } else if (type === 'category') {
-        document.getElementById('modalTitle').innerText = 'Definir Meta por Categoria';
-        document.getElementById('modalContentCategory').style.display = 'block';
-        document.getElementById('modalCategorySelect').value = Object.keys(metasPorCategoria)[0] || 'Alimentação';
-        document.getElementById('modalCategoryValor').value = metasPorCategoria[document.getElementById('modalCategorySelect').value] || 0;
-    } else if (type === 'objetivo') {
-        document.getElementById('modalTitle').innerText = 'Editar Objetivo de Economia';
-        document.getElementById('modalContentObjetivo').style.display = 'block';
-        document.getElementById('modalObjetivoValor').value = objetivoEconomia;
-        document.getElementById('modalObjetivoMeses').value = objetivoMeses;
-    }
-    
-    modal.classList.add('open');
-}
-
-function fecharModalMeta() {
-    document.getElementById('metaModal').classList.remove('open');
-}
-
-function salvarMeta() {
-    const type = document.getElementById('modalMetaType').value;
-
-    if (type === 'global') {
-        metaTipo = document.getElementById('modalMetaTipo').value;
-        const novoValor = parseFloat(document.getElementById('modalMetaValor').value);
-        if (!isNaN(novoValor) && novoValor >= 0) {
-            metaValor = novoValor;
-            localStorage.setItem('metaTipo', metaTipo);
-            localStorage.setItem('metaValor', metaValor);
-            // Recalcula e atualiza o card (gastoHoje e gastoMes são calculados em atualizarCardsGlobais)
+        const tipoAtual = metaTipo === 'diario' ? 'Diário' : 'Mensal';
+        const novoTipo = prompt(`Tipo de Meta Atual: ${tipoAtual}\n\nDigite:\n1 - Para Meta Diária\n2 - Para Meta Mensal`, metaTipo === 'diario' ? '1' : '2');
+        
+        if(novoTipo === '1') {
+            metaTipo = 'diario';
+        } else if(novoTipo === '2') {
+            metaTipo = 'mensal';
+        } else if(novoTipo !== null) {
+            alert('Opção inválida! Use 1 para Diário ou 2 para Mensal.');
+            return;
         } else {
-            alert('❌ Valor inválido! Digite um número positivo.');
             return;
         }
-    } else if (type === 'category') {
-        const cat = document.getElementById('modalCategorySelect').value;
-        const novoValor = parseFloat(document.getElementById('modalCategoryValor').value);
         
-        if (!isNaN(novoValor) && novoValor >= 0) {
-            if (novoValor === 0) {
-                delete metasPorCategoria[cat];
+        const novoValor = prompt(`Meta de Gastos ${metaTipo === 'diario' ? 'Diária' : 'Mensal'}:\n\nValor Atual: R$ ${metaValor.toFixed(2)}\n\nDigite o novo valor (ex: 5000):`, metaValor);
+        
+        if(novoValor !== null) {
+            const valorParseado = parseFloat(novoValor.replace(',', '.'));
+            if(!isNaN(valorParseado) && valorParseado > 0) {
+                metaValor = valorParseado;
+                localStorage.setItem('metaTipo', metaTipo);
+                localStorage.setItem('metaValor', metaValor);
+                
+                const hoje = new Date();
+                const hojeStr = hoje.toISOString().split('T')[0];
+                const mesAtual = hoje.getMonth();
+                const anoAtual = hoje.getFullYear();
+                
+                let gastoHoje = 0, gastoMes = 0;
+                registros.forEach(r => {
+                    const dataRegistro = new Date(r.data + 'T12:00:00');
+                    const valor = parseFloat(r.valor);
+                    if(r.data === hojeStr && r.tipo === "Pagar" && r.status === "Pago") gastoHoje += valor;
+                    if(dataRegistro.getMonth() === mesAtual && dataRegistro.getFullYear() === anoAtual && r.tipo === "Pagar" && r.status === "Pago") gastoMes += valor;
+                });
+                
+                atualizarCardMeta(gastoHoje, gastoMes);
+                alert(`✅ Meta ${metaTipo === 'diario' ? 'Diária' : 'Mensal'} atualizada para ${formatarMoeda(metaValor)}`);
             } else {
-                metasPorCategoria[cat] = novoValor;
+                alert('❌ Valor inválido! Digite um número positivo.');
             }
-            localStorage.setItem('metasPorCategoria', JSON.stringify(metasPorCategoria));
+        }
+    } else if (type === 'objetivo') { // Novo: Edição de Meta de Poupança/Investimento
+        const novoObjetivo = prompt(`Objetivo de Economia/Investimento:\n\nValor Atual: R$ ${objetivoEconomia.toFixed(2)}\n\nDigite o valor total do objetivo (ex: 10000):`, objetivoEconomia);
+        
+        if (novoObjetivo !== null) {
+            const valorParseado = parseFloat(novoObjetivo.replace(',', '.'));
+            if (!isNaN(valorParseado) && valorParseado > 0) {
+                objetivoEconomia = valorParseado;
+                localStorage.setItem('objetivoEconomia', objetivoEconomia);
+            } else {
+                alert('❌ Valor do Objetivo inválido! Digite um número positivo.');
+                return;
+            }
         } else {
-            alert('❌ Valor inválido! Digite um número positivo ou zero.');
             return;
         }
-    } else if (type === 'objetivo') {
-        const novoObjetivo = parseFloat(document.getElementById('modalObjetivoValor').value);
-        const novosMeses = parseInt(document.getElementById('modalObjetivoMeses').value);
         
-        if (!isNaN(novoObjetivo) && novoObjetivo > 0 && !isNaN(novosMeses) && novosMeses > 0) {
-            objetivoEconomia = novoObjetivo;
-            objetivoMeses = novosMeses;
-            localStorage.setItem('objetivoEconomia', objetivoEconomia);
-            localStorage.setItem('objetivoMeses', objetivoMeses);
-            atualizarCardObjetivo();
+        const novosMeses = prompt(`Prazo (em meses) para o Objetivo:\n\nPrazo Atual: ${objetivoMeses} meses\n\nDigite o novo prazo (ex: 12):`, objetivoMeses);
+        
+        if (novosMeses !== null) {
+            const mesesParseado = parseInt(novosMeses);
+            if (!isNaN(mesesParseado) && mesesParseado > 0) {
+                objetivoMeses = mesesParseado;
+                localStorage.setItem('objetivoMeses', objetivoMeses);
+            } else {
+                alert('❌ Prazo inválido! Digite um número inteiro positivo.');
+                return;
+            }
         } else {
-            alert('❌ Valores inválidos! Digite números positivos para ambos.');
             return;
+        }
+
+        atualizarCardObjetivo();
+        alert(`✅ Objetivo atualizado: ${formatarMoeda(objetivoEconomia)} em ${objetivoMeses} meses.`);
+
+    } else {
+        // Sugestão 8: Edição de Metas por Categoria
+        const cat = prompt(`Digite a categoria para definir/editar a meta (ex: Alimentação):`);
+        if (!cat) return;
+        
+        const valorAtual = metasPorCategoria[cat] || 0;
+        const novoValorStr = prompt(`Meta de Gastos MENSAL para ${cat}:\n\nValor Atual: R$ ${valorAtual.toFixed(2)}\n\nDigite o novo valor (0 para remover):`, valorAtual);
+        
+        if (novoValorStr !== null) {
+            const novoValor = parseFloat(novoValorStr.replace(',', '.'));
+            if (!isNaN(novoValor) && novoValor >= 0) {
+                if (novoValor === 0) {
+                    delete metasPorCategoria[cat];
+                    alert(`✅ Meta para ${cat} removida.`);
+                } else {
+                    metasPorCategoria[cat] = novoValor;
+                    alert(`✅ Meta para ${cat} definida em ${formatarMoeda(novoValor)}.`);
+                }
+                localStorage.setItem('metasPorCategoria', JSON.stringify(metasPorCategoria));
+                atualizarCardsGlobais(registros); // Para recalcular e atualizar o resumo das metas
+            } else {
+                alert('❌ Valor inválido! Digite um número positivo ou zero.');
+            }
         }
     }
-    
-    // Atualiza todos os cards/gráficos/resumos
-    atualizarCardsGlobais(registros); 
-    fecharModalMeta();
 }
-
-// Adiciona evento para atualizar o valor da meta de categoria ao mudar a seleção
-document.getElementById('modalCategorySelect').addEventListener('change', function() {
-    const cat = this.value;
-    document.getElementById('modalCategoryValor').value = metasPorCategoria[cat] || 0;
-});
-
 
 // Sugestão 8: Resumo das Metas por Categoria
 function atualizarCategoryMetas(dataList) {
@@ -2392,7 +2208,7 @@ function atualizarCategoryMetas(dataList) {
     const categoriasComMeta = Object.keys(metasPorCategoria).sort();
 
     if (categoriasComMeta.length === 0) {
-        summaryDiv.innerHTML = '<div style="text-align: center; color: #b0b0b0;">Clique no card acima para editar, ou <span style="cursor:pointer; color:var(--meta-color); font-weight:700;" onclick="abrirModalMeta(\'category\')">defina metas por categoria</span>.</div>';
+        summaryDiv.innerHTML = '<div style="text-align: center; color: #b0b0b0;">Clique no card acima para editar, ou <span style="cursor:pointer; color:var(--meta-color); font-weight:700;" onclick="editarMeta(\'category\')">defina metas por categoria</span>.</div>';
         return;
     }
 
@@ -2403,7 +2219,7 @@ function atualizarCategoryMetas(dataList) {
         
         const item = document.createElement('div');
         item.classList.add('category-progress-item');
-        item.onclick = () => { abrirModalMeta('category'); document.getElementById('modalCategorySelect').value = cat; document.getElementById('modalCategoryValor').value = meta; }; // Preenche a categoria ao clicar
+        item.onclick = () => editarMeta('category');
         item.style.cursor = 'pointer';
 
         let progressClass = '';
@@ -2429,7 +2245,7 @@ function atualizarCategoryMetas(dataList) {
 }
 
 
-// Sugestão 12 & 10: Calendário Financeiro com Tooltip
+// Sugestão 12: Calendário Financeiro
 function renderizarCalendario(dataList) {
     const calDiv = document.getElementById('financialCalendar');
     calDiv.innerHTML = '<div class="calendar-header">Dom</div><div class="calendar-header">Seg</div><div class="calendar-header">Ter</div><div class="calendar-header">Qua</div><div class="calendar-header">Qui</div><div class="calendar-header">Sex</div><div class="calendar-header">Sáb</div>';
@@ -2470,29 +2286,34 @@ function renderizarCalendario(dataList) {
     for (let dia = 1; dia <= diasNoMes; dia++) {
         const diaDiv = document.createElement('div');
         diaDiv.classList.add('calendar-day');
-        
-        let diaHtml = `<span class="calendar-day-number">${dia}</span>`;
-        let tooltipHtml = '';
-        
         if (eventosDoMes[dia] && (eventosDoMes[dia].pagar > 0 || eventosDoMes[dia].receber > 0)) {
             diaDiv.classList.add('day-has-events');
-            
+            diaDiv.onclick = () => {
+                const itens = eventosDoMes[dia].itens.map(i => `${i.tipo}: ${i.descricao} (${formatarMoeda(i.valor)})`).join('\n');
+                alert(`Lançamentos para ${dia}/${mes+1}:\n\n${itens}`);
+            };
+        }
+        
+        let diaHtml = `<span class="calendar-day-number">${dia}</span>`;
+        if (eventosDoMes[dia]) {
             if (eventosDoMes[dia].pagar > 0) {
                 diaHtml += `<div class="day-pagar">P: ${formatarMoeda(eventosDoMes[dia].pagar)}</div>`;
+                // Sugestão 11: Avisos de contas próximas do vencimento (simplificado)
+                const dataVenc = new Date(ano, mes, dia);
+                const diffDias = Math.ceil((dataVenc - hoje) / (1000 * 60 * 60 * 24));
+                if (diffDias >= 0 && diffDias <= 3) {
+                    // console.log(`Alerta: Contas a pagar vencem em ${diffDias} dias!`);
+                }
             }
             if (eventosDoMes[dia].receber > 0) {
                 diaHtml += `<div class="day-receber">R: ${formatarMoeda(eventosDoMes[dia].receber)}</div>`;
             }
-
-            tooltipHtml = eventosDoMes[dia].itens.map(i => `${i.tipo}: ${i.descricao} (${formatarMoeda(i.valor)})`).join('\n');
-            diaHtml += `<div class="calendar-tooltip">${tooltipHtml}</div>`; // Adiciona o tooltip
         }
         
         diaDiv.innerHTML = diaHtml;
         calDiv.appendChild(diaDiv);
     }
 }
-
 
 // Novo: Sugestão 18 - Lógica de Pagamento Parcial
 function pagamentoParcial(row) {
