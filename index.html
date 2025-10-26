@@ -9,34 +9,32 @@
 <style>
 /* VARIÁVEIS DE COR E TEMA */
 :root {
-    --bg-dark: linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);
-    --bg-light: linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);
-    --card-bg-dark: linear-gradient(135deg,rgba(42,42,62,0.95) 0%,rgba(31,31,46,0.95) 100%);
-    --card-bg-light: linear-gradient(135deg,#ffffff 0%,#f8f9fa 100%);
+    --bg-dark: linear-gradient(135deg,#1e1e2e 0%,#2a2a3e 100%);
+    --bg-light: linear-gradient(135deg,#f0f0f5 0%,#e0e0eeb0 100%);
+    --card-bg-dark: linear-gradient(135deg,#2a2a3e 0%,#1f1f2e 100%);
+    --card-bg-light: #ffffff;
     --text-color-dark: #e0e0e0;
     --text-color-light: #333333;
     --header-color-dark: #fff;
     --header-color-light: #4a90e2;
-    --input-bg-dark: rgba(255,255,255,0.08);
+    --input-bg-dark: rgba(255,255,255,0.05);
     --input-bg-light: #ffffff;
-    --input-border-dark: rgba(255,255,255,0.25);
+    --input-border-dark: rgba(255,255,255,0.2);
     --input-border-light: #dddddd;
-    --table-header-bg-dark: rgba(255,255,255,0.08);
+    --table-header-bg-dark: rgba(255,255,255,0.05);
     --table-header-bg-light: #f5f5f5;
-    --table-row-hover-dark: rgba(255,255,255,0.08);
+    --table-row-hover-dark: rgba(255,255,255,0.05);
     --table-row-hover-light: #f0f0f0;
-    --primary-color: #667eea;
-    --pagar-color: #f093fb;
-    --receber-color: #4facfe;
-    --vencido-color: #fa709a;
-    --meta-color: #a18cd1;
-    --warning-color: #fbc531;
-    --sobra-color: #00d2ff;
-    --falta-color: #ee5a6f;
-    --fab-color: #667eea;
-    --qr-color: #764ba2;
+    --primary-color: #4a90e2;
+    --pagar-color: #ff6b9d;
+    --receber-color: #26de81;
+    --vencido-color: #f74f4f;
+    --meta-color: #9966ff;
+    --warning-color: #ffc107;
+    --sobra-color: #2ecc71;
+    --falta-color: #e74c3c;
+    --fab-color: #3498db;
 }
-/* TEMA CLARO */
 html[data-theme="light"] {
     --bg-dark: var(--bg-light);
     --card-bg-dark: var(--card-bg-light);
@@ -46,9 +44,8 @@ html[data-theme="light"] {
     --input-border-dark: var(--input-border-light);
     --table-header-bg-dark: var(--table-header-bg-light);
     --table-row-hover-dark: var(--table-row-hover-light);
-    --sync-dot-dark: var(--receber-color);
+    --sync-dot-dark: #26de81;
 }
-/* ESTILOS BASEADOS EM VARIÁVEIS */
 * { margin:0; padding:0; box-sizing:border-box; }
 body { 
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -70,7 +67,6 @@ header h1 {
   justify-content:center;
   gap:15px;
 }
-/* Estilos para o botão de tema */
 .theme-toggle-btn {
     position: fixed;
     top: 20px;
@@ -85,7 +81,6 @@ header h1 {
     z-index: 1000;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
-/* Estilos para o FAB (Floating Action Button) - Sugestão 25 */
 .fab-container {
     position: fixed;
     bottom: 20px;
@@ -108,7 +103,7 @@ header h1 {
     justify-content: center;
 }
 .fab-btn:hover {
-    background: #455be9; /* Um pouco mais escuro que o fab-color */
+    background: #2980b9;
     transform: scale(1.05);
 }
 .quick-menu {
@@ -155,8 +150,8 @@ header h1 {
     display: block;
 }
 .sync-status {
-  background:rgba(79,175,254,0.2);
-  border:1px solid rgba(79,175,254,0.5);
+  background:rgba(38,222,129,0.2);
+  border:1px solid rgba(38,222,129,0.5);
   color:var(--receber-color);
   padding:10px 15px;
   border-radius:10px;
@@ -170,8 +165,8 @@ header h1 {
   margin-right:auto;
 }
 .sync-status.offline {
-  background:rgba(240,147,251,0.2);
-  border-color:rgba(240,147,251,0.5);
+  background:rgba(255,107,157,0.2);
+  border-color:rgba(255,107,157,0.5);
   color:var(--pagar-color);
 }
 .sync-status .dot {
@@ -227,7 +222,6 @@ html[data-theme="light"] .card {
 .card-saldo .card-value { color:var(--primary-color); }
 .card-vencido .card-value { color:var(--vencido-color); }
 .card-meta .card-value { color:var(--meta-color); }
-/* Novo estilo para Sobra/Falta */
 .card-sobra .card-value { color:var(--sobra-color); }
 .card-falta .card-value { color:var(--falta-color); }
 .card-meta { position: relative; cursor: pointer; }
@@ -320,8 +314,8 @@ html[data-theme="light"] select {
 input:focus, select:focus { 
   outline:none;
   border-color:var(--primary-color);
-  background:rgba(102,126,234,0.1);
-  box-shadow:0 0 20px rgba(102,126,234,0.3);
+  background:rgba(74,144,226,0.1);
+  box-shadow:0 0 20px rgba(74,144,226,0.3);
 }
 button { 
   padding:12px 24px; 
@@ -333,35 +327,34 @@ button {
   transition:all 0.3s ease;
 }
 .btn-primary { 
-  background:linear-gradient(135deg,var(--primary-color) 0%,#455be9 100%);
+  background:linear-gradient(135deg,var(--primary-color) 0%,#357abd 100%);
   color:white; 
   width:100%; 
 }
 .btn-primary:hover { 
   transform:translateY(-2px);
-  box-shadow:0 8px 25px rgba(102,126,234,0.4);
+  box-shadow:0 8px 25px rgba(74,144,226,0.4);
 }
 .btn-danger { 
-  background:linear-gradient(135deg,var(--vencido-color) 0%,#d34c6e 100%);
+  background:linear-gradient(135deg,var(--pagar-color) 0%,#d63447 100%);
   color:white; 
   font-size:0.9em;
   padding:8px 16px;
 }
 .btn-edit { 
-  background:linear-gradient(135deg,var(--receber-color) 0%,#3d8fd8 100%);
+  background:linear-gradient(135deg,var(--receber-color) 0%,#1bb366 100%);
   color:white; 
   font-size:0.9em;
   padding:8px 16px;
 }
-/* Novo botão para Pagamento Parcial */
 .btn-partial {
-    background: linear-gradient(135deg, var(--warning-color) 0%, #d89f1f 100%);
+    background: linear-gradient(135deg, var(--warning-color) 0%, #e67e22 100%);
     color: white; 
     font-size: 0.85em;
     padding: 8px 10px;
 }
 .btn-filter {
-  background:linear-gradient(135deg,#fbc531 0%,#e19812 100%);
+  background:linear-gradient(135deg,#ffc107 0%,#ff9800 100%);
   color:white;
   padding:10px 20px;
   margin-bottom:0; 
@@ -369,7 +362,7 @@ button {
   width: auto;
 }
 .btn-filter.active {
-  background:linear-gradient(135deg,var(--pagar-color) 0%,#a176e0 100%);
+  background:linear-gradient(135deg,var(--pagar-color) 0%,#d63447 100%);
 }
 .search-bar { margin-bottom:15px; }
 .search-bar input { width:100%; }
@@ -402,24 +395,24 @@ tr:hover { background:var(--table-row-hover-dark); }
   display:inline-block;
 }
 .badge-pagar { 
-  background:rgba(240,147,251,0.2); 
+  background:rgba(255,107,157,0.2); 
   color:var(--pagar-color); 
-  border:1px solid rgba(240,147,251,0.5);
+  border:1px solid rgba(255,107,157,0.5);
 }
 .badge-receber { 
-  background:rgba(79,175,254,0.2); 
+  background:rgba(38,222,129,0.2); 
   color:var(--receber-color); 
-  border:1px solid rgba(79,175,254,0.5);
+  border:1px solid rgba(38,222,129,0.5);
 }
 .badge-pendente { 
-  background:rgba(251,197,49,0.2); 
-  color:var(--warning-color); 
-  border:1px solid rgba(251,197,49,0.5);
+  background:rgba(255,193,7,0.2); 
+  color:#ffc107; 
+  border:1px solid rgba(255,193,7,0.5);
 }
 .badge-pago { 
-  background:rgba(79,175,254,0.2); 
+  background:rgba(38,222,129,0.2); 
   color:var(--receber-color); 
-  border:1px solid rgba(79,175,254,0.5);
+  border:1px solid rgba(38,222,129,0.5);
 }
 .status-filters {
     display: flex;
@@ -451,32 +444,32 @@ tr:hover { background:var(--table-row-hover-dark); }
 }
 .status-filter-btn.active {
     border-color: var(--primary-color);
-    background: rgba(102,126,234,0.2);
+    background: rgba(74,144,226,0.2);
     color: var(--primary-color);
 }
 .status-filter-btn.filter-pendente.active {
     border-color: var(--warning-color);
-    background: rgba(251,197,49,0.2);
+    background: rgba(255,193,7,0.2);
     color: var(--warning-color);
 }
 .status-filter-btn.filter-pago.active {
     border-color: var(--receber-color);
-    background: rgba(79,175,254,0.2);
+    background: rgba(38,222,129,0.2);
     color: var(--receber-color);
 }
 .status-filter-btn.filter-recebido.active {
     border-color: var(--receber-color);
-    background: rgba(79,175,254,0.2);
+    background: rgba(38,222,129,0.2);
     color: var(--receber-color);
 }
 .status-filter-btn.filter-pagar.active {
     border-color: var(--pagar-color);
-    background: rgba(240,147,251,0.2);
+    background: rgba(255,107,157,0.2);
     color: var(--pagar-color);
 }
 .status-filter-btn.filter-receber.active {
     border-color: var(--receber-color);
-    background: rgba(79,175,254,0.2);
+    background: rgba(38,222,129,0.2);
     color: var(--receber-color);
 }
 .filter-count {
@@ -489,7 +482,7 @@ tr:hover { background:var(--table-row-hover-dark); }
 .actions { 
   display:flex; 
   gap:8px;
-  flex-wrap: wrap; /* Permite quebrar em telas pequenas */
+  flex-wrap: wrap;
 }
 .filter-controls {
     display:flex; 
@@ -507,7 +500,7 @@ tr:hover { background:var(--table-row-hover-dark); }
     min-width: 250px;
 }
 .filter-summary {
-    background: rgba(102,126,234,0.1);
+    background: rgba(74,144,226,0.1);
     border: 1px solid var(--primary-color);
     padding: 15px;
     border-radius: 10px;
@@ -534,9 +527,8 @@ tr:hover { background:var(--table-row-hover-dark); }
     color: #b0b0b0;
 }
 .star {
-    color: #fbc531;
+    color: #ffc107;
 }
-/* Novo: Estilos para Metas por Categoria */
 .category-progress-container {
     margin-top: 20px;
     padding: 15px;
@@ -574,7 +566,6 @@ tr:hover { background:var(--table-row-hover-dark); }
 .category-progress-item .progress-fill.danger {
     background: var(--pagar-color);
 }
-/* Novo: Estilos para Calendário Financeiro */
 .financial-calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -612,10 +603,9 @@ tr:hover { background:var(--table-row-hover-dark); }
     font-size: 0.75em;
 }
 .day-has-events {
-    box-shadow: 0 0 10px rgba(102,126,234,0.5);
+    box-shadow: 0 0 10px rgba(74,144,226,0.5);
     border-color: var(--primary-color);
 }
-/* Novo: Modo Compacto/Expandido (apenas toggle visual para a tabela) */
 .table-compact td {
     padding: 8px 5px !important;
 }
@@ -645,7 +635,7 @@ tr:hover { background:var(--table-row-hover-dark); }
       padding: 6px 12px;
   }
   .cards-summary { grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); }
-  .actions button { /* Ajuste para botões de ação na tabela em mobile */
+  .actions button {
         margin-bottom: 5px;
     }
 }
@@ -653,6 +643,9 @@ tr:hover { background:var(--table-row-hover-dark); }
 </head>
 <body>
 <button class="theme-toggle-btn" onclick="toggleTheme()">☀️ Modo Diurno</button>
+
+<!-- ✅ TELA DE LOGIN REMOVIDA -->
+
 <div class="container" id="mainContainer">
 <header>
 <h1>💰 Controle Financeiro</h1>
@@ -881,9 +874,9 @@ tr:hover { background:var(--table-row-hover-dark); }
     </div>
     <button class="btn-filter" id="btnFiltrarData" style="min-width:120px; height: 45px; padding:10px 20px; align-self:flex-end;">Filtrar Customizado</button>
     <button class="btn-filter" id="btnFiltrarFav" style="height: 45px; padding:10px 20px; align-self:flex-end;">⭐ Apenas Favoritos</button>
-    <button class="btn-primary" onclick="toggleCompactMode(this)" style="width: auto; height: 45px; padding:10px 20px; align-self:flex-end; background: #667eea;">↔️ Modo Compacto</button>
+    <button class="btn-primary" onclick="toggleCompactMode(this)" style="width: auto; height: 45px; padding:10px 20px; align-self:flex-end; background: #3498db;">↔️ Modo Compacto</button>
     <button class="btn-primary export-btn" onclick="exportarExcel()" style="width: auto; height: 45px; padding:10px 20px; align-self:flex-end;">📥 Exportar Excel</button>
-    <button class="btn-primary export-btn" onclick="alert('Funcionalidade de PDF Otimizado em desenvolvimento!')" style="width: auto; height: 45px; padding:10px 20px; align-self:flex-end; background: #fa709a;">🖨️ Exportar PDF</button>
+    <button class="btn-primary export-btn" onclick="alert('Funcionalidade de PDF Otimizado em desenvolvimento!')" style="width: auto; height: 45px; padding:10px 20px; align-self:flex-end; background: #c0392b;">🖨️ Exportar PDF</button>
 </div>
 <div class="filter-summary" id="periodSummary">
     <span>Período Filtrado:</span>
@@ -953,21 +946,19 @@ let chartMensal;
 let chartFluxoCaixa;
 let chartCompMensal;
 let mostraApenasFav = false;
+// ✅ REMOVIDO: let usuarioAutenticado = false;
 let currentTheme = localStorage.getItem('theme') || 'dark';
 let filtroStatusAtual = 'todos';
 let filtroCategoriaAtual = 'all';
-// Sugestão 8: Metas por Categoria
 let metasPorCategoria = JSON.parse(localStorage.getItem('metasPorCategoria')) || {
     "Alimentação": 800,
     "Moradia/Aluguel": 1500,
     "Transporte": 300
 };
-// Sugestão 9/10: Planejamento (Objetivo de economia)
 let objetivoEconomia = parseFloat(localStorage.getItem('objetivoEconomia')) || 10000;
 let objetivoMeses = parseInt(localStorage.getItem('objetivoMeses')) || 12;
 let metaTipo = localStorage.getItem('metaTipo') || 'mensal';
 let metaValor = parseFloat(localStorage.getItem('metaValor')) || 5000;
-// Sugestão 28: Regras Automáticas
 const regrasAutomacao = [
     { termo: "uber", categoria: "Transporte" },
     { termo: "ifood", categoria: "Alimentação" },
@@ -975,7 +966,7 @@ const regrasAutomacao = [
     { termo: "aluguel", categoria: "Moradia/Aluguel" }
 ];
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxCkEbskP0tA-4Ii_9v1wS7z2_9yHP0nn-_GroK_Z4paEiurRMz6Iole6902c00FR-Q/exec";
-
+// ✅ REMOVIDO: const SENHA_ACESSO = "minhasenha123";
 const formatarMoeda = valor => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(valor);
 function toggleTheme() {
     currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -990,9 +981,10 @@ function applyTheme() {
     } else {
         themeButton.innerHTML = '☀️ Modo Diurno';
     }
-    // Atualizar gráficos com novo tema
     if(chart) atualizarGraficos(registros); 
 }
+// ✅ REMOVIDAS: fazerLogin(), verificarAutenticacao()
+
 function corrigirData(dataInput) {
   const data = new Date(dataInput + 'T12:00:00'); 
   const ano = data.getFullYear();
@@ -1016,13 +1008,12 @@ function atualizarStatusSync(sincronizado) {
     text.innerText = "⚠ Offline - Dados locais";
   }
 }
-// Sugestão 2: Card de Economia/Sobra do Mês e Sugestão 20/21/22: Análises
 function atualizarCardsGlobais(dataList) {
     let totalPagarGlobal=0,totalReceberGlobal=0;
     let gastoHojeGlobal = 0, gastoMesGlobal = 0;
     let totalVencidos = 0;
     let vencemSeteDias = 0;
-    let dadosMensais = {}; // Para Sobra/Falta do Mês
+    let dadosMensais = {};
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
     const hojeStr = hoje.toISOString().split('T')[0];
@@ -1037,7 +1028,6 @@ function atualizarCardsGlobais(dataList) {
         if (!dadosMensais[mesAno]) {
             dadosMensais[mesAno] = { entrada: 0, saida: 0, saldo: 0 };
         }
-        // Soma apenas os valores de status "Pendente" para os cards "Total a Pagar" e "Total a Receber"
         if(r.tipo==="Pagar") {
             if(r.status==="Pendente") totalPagarGlobal += valor;
             dadosMensais[mesAno].saida += valor;
@@ -1045,11 +1035,9 @@ function atualizarCardsGlobais(dataList) {
             if(r.status==="Pendente") totalReceberGlobal += valor;
             dadosMensais[mesAno].entrada += valor;
         }
-        // Contas Pagas (ou Recebidas) no dia de hoje
         if(r.data === hojeStr && r.tipo==="Pagar" && r.status === "Pago") {
             gastoHojeGlobal += valor;
         }
-        // Gasto total (Pago) no mês
         if(dataRegistro.getMonth() === mesAtual && dataRegistro.getFullYear() === anoAtual && r.tipo==="Pagar" && r.status === "Pago") {
             gastoMesGlobal += valor;
         }
@@ -1062,22 +1050,20 @@ function atualizarCardsGlobais(dataList) {
             }
         }
     });
-    // Calcular Saldo/Falta do Mês Atual (Com base em Pago/Recebido - Realizado)
     const mesAnoAtual = anoAtual + '-' + String(mesAtual + 1).padStart(2, '0');
     let entradaRealizadaMes = dataList.filter(r => 
         r.tipo === "Receber" && 
-        (r.status === "Recebido" || r.status === "Pago") && // Recebido/Pago
+        (r.status === "Recebido" || r.status === "Pago") && 
         new Date(r.data + 'T12:00:00').getMonth() === mesAtual && 
         new Date(r.data + 'T12:00:00').getFullYear() === anoAtual
     ).reduce((sum, r) => sum + parseFloat(r.valor), 0);
     let saidaRealizadaMes = dataList.filter(r => 
         r.tipo === "Pagar" && 
-        (r.status === "Pago" || r.status === "Recebido") && // Pago/Recebido
+        (r.status === "Pago" || r.status === "Recebido") && 
         new Date(r.data + 'T12:00:00').getMonth() === mesAtual && 
         new Date(r.data + 'T12:00:00').getFullYear() === anoAtual
     ).reduce((sum, r) => sum + parseFloat(r.valor), 0);
     const saldoMesAtual = entradaRealizadaMes - saidaRealizadaMes;
-    // Calcular Média dos Últimos 3 Meses (Realizado)
     let saldoTotal3M = 0;
     let mesesContados = 0;
     for(let i = 1; i <= 3; i++) {
@@ -1114,37 +1100,33 @@ function atualizarCardsGlobais(dataList) {
     }
     document.getElementById("totalPagar").innerText=formatarMoeda(totalPagarGlobal);
     document.getElementById("totalReceber").innerText=formatarMoeda(totalReceberGlobal);
-    document.getElementById("totalDia").innerText=formatarMoeda(totalReceberGlobal-totalPagarGlobal); // Saldo Pendente
+    document.getElementById("totalDia").innerText=formatarMoeda(totalReceberGlobal-totalPagarGlobal);
     document.getElementById("gastoHoje").innerText=formatarMoeda(gastoHojeGlobal);
     document.getElementById("totalVencidos").innerText=formatarMoeda(totalVencidos);
     document.getElementById("vencemSeteDias").innerText=formatarMoeda(vencemSeteDias);
     atualizarCardMeta(gastoHojeGlobal, gastoMesGlobal);
-    atualizarCardObjetivo(); // Novo
+    atualizarCardObjetivo();
     atualizarContadoresFiltros(dataList);
-    atualizarCategoryMetas(dataList); // Sugestão 8
-    renderizarCalendario(dataList); // Sugestão 12
+    atualizarCategoryMetas(dataList);
+    renderizarCalendario(dataList);
 }
 function mostrarRegistros(lista){
   const tbody = document.querySelector("#tabelaFinance tbody");
   tbody.innerHTML="";
-  // Atualizar cards com todos os registros (não apenas os filtrados da tabela)
   atualizarCardsGlobais(registros); 
   lista.forEach(r=>{
     const tr=document.createElement("tr");
     const tipoBadge=r.tipo==="Pagar"?"badge-pagar":"badge-receber";
     const statusBadge=r.status==="Pendente"?"badge-pendente":(r.status==="Pago"||r.status==="Recebido")?"badge-pago":"badge-pendente";
     const starClass = r.fav ? "star" : "star-empty";
-    // Sugestão 4 e 5: Adicionar Recorrência e Parcela na descrição ou em Campos
     let camposAdicionais = `${r.campo2||'-'} ${r.campo3||''}`;
     if (r.recorrente === 'Sim') camposAdicionais += ' [RECORR.]';
     if (r.parcelaTotal && r.parcelaTotal > 1) camposAdicionais += ` [${r.parcelaAtual}/${r.parcelaTotal}]`;
-    // Lógica para Pagamento Parcial (Mostra o valor original e o pago)
     let valorDisplay = formatarMoeda(parseFloat(r.valor));
     let acoesHtml = `<button class="btn-edit" onclick="editar(${r.row})">Editar</button><button class="btn-danger" onclick="excluir(${r.row})">Excluir</button>`;
     if (r.valorOriginal && parseFloat(r.valorOriginal) > parseFloat(r.valor)) {
         valorDisplay = `<span style="text-decoration:line-through; color:var(--pagar-color);">${formatarMoeda(parseFloat(r.valorOriginal))}</span> ${formatarMoeda(parseFloat(r.valor))}`;
     }
-    // Adicionar botão de Pagamento Parcial apenas se for Pagar e Pendente
     if (r.tipo === 'Pagar' && r.status === 'Pendente') {
          acoesHtml = `<button class="btn-partial" onclick="pagamentoParcial(${r.row})">Parcial</button> ` + acoesHtml;
     }
@@ -1171,12 +1153,10 @@ function mostrarRegistros(lista){
 function atualizarGraficos(dataList){
   const fontColor = currentTheme === 'light' ? '#333333' : '#e0e0e0';
   const gridColor = currentTheme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)';
-  // FILTROS ATUALIZADOS: Gráficos de Gastos devem usar o status "Pago" (Realizado)
   const gastosRealizados = dataList.filter(r => r.tipo === "Pagar" && r.status === "Pago");
   const pagamentosPendentes = dataList.filter(r => r.tipo === "Pagar" && r.status === "Pendente");
   const entradasRealizadas = dataList.filter(r => r.tipo === "Receber" && r.status === "Recebido");
   const saidasRealizadas = dataList.filter(r => r.tipo === "Pagar" && r.status === "Pago");
-  // Gráfico 1: Gastos por Categoria (Pizza) - Apenas Pendentes para Lembrar
   const gastosPendentesPorCategoria = pagamentosPendentes.reduce((acc, r) => {
     acc[r.categoria] = (acc[r.categoria] || 0) + parseFloat(r.valor);
     return acc;
@@ -1187,11 +1167,11 @@ function atualizarGraficos(dataList){
   if(chart) chart.destroy();
   chart=new Chart(ctx,{
     type:'doughnut',
-    data:{
+    {
       labels: categoriasLabels,
       datasets:[{
-        data: categoriasValores,
-        backgroundColor:['#f093fb','#4facfe','#667eea','#fbc531','#a18cd1','#fa709a','#00d2ff','#ee5a6f','#c9cbcf'],
+         categoriasValores,
+        backgroundColor:['#ff6b9d','#26de81','#4a90e2','#ffc107','#9966ff','#ff9800','#3498db','#e74c3c','#c9cbcf'],
         borderColor: currentTheme === 'light' ? '#ffffff' : '#1f1f2e',
         borderWidth:3
       }]
@@ -1204,10 +1184,9 @@ function atualizarGraficos(dataList){
       }
     }
   });
-  // Gráfico 2: Fluxo de Caixa (Linha ao longo do tempo - Realizado)
   const dadosFluxo = {};
   const dataInicioFluxo = new Date();
-  dataInicioFluxo.setMonth(dataInicioFluxo.getMonth() - 5); // Últimos 6 meses
+  dataInicioFluxo.setMonth(dataInicioFluxo.getMonth() - 5);
   dataInicioFluxo.setDate(1);
   entradasRealizadas.concat(saidasRealizadas).forEach(r => {
     const dataRegistro = new Date(r.data + 'T12:00:00');
@@ -1221,13 +1200,11 @@ function atualizarGraficos(dataList){
   const mesesFluxo = Object.keys(dadosFluxo).sort((a, b) => {
     const [mesA, anoA] = a.split('/');
     const [mesB, anoB] = b.split('/');
-    // Tenta parsear como data
     let dateA, dateB;
     try {
         dateA = new Date(`01 ${mesA} 20${anoA}`);
         dateB = new Date(`01 ${mesB} 20${anoB}`);
     } catch (e) {
-        // Fallback for sorting if date parsing fails (e.g. invalid short month name)
         return a.localeCompare(b);
     }
     return dateA - dateB;
@@ -1236,19 +1213,19 @@ function atualizarGraficos(dataList){
   if(chartFluxoCaixa) chartFluxoCaixa.destroy();
   chartFluxoCaixa = new Chart(ctxFluxoCaixa, {
     type: 'bar',
-    data: {
+     {
       labels: mesesFluxo,
       datasets: [
         {
           label: 'Entradas (Recebido)',
-          data: mesesFluxo.map(m => dadosFluxo[m].entrada),
-          backgroundColor: var(--receber-color),
+           mesesFluxo.map(m => dadosFluxo[m].entrada),
+          backgroundColor: '#26de81',
           stack: 'stack1'
         },
         {
           label: 'Saídas (Pago)',
-          data: mesesFluxo.map(m => -dadosFluxo[m].saida), // Valores negativos para despesas
-          backgroundColor: var(--pagar-color),
+           mesesFluxo.map(m => -dadosFluxo[m].saida),
+          backgroundColor: '#ff6b9d',
           stack: 'stack1'
         }
       ]
@@ -1265,7 +1242,6 @@ function atualizarGraficos(dataList){
       }
     }
   });
-  // Gráfico 3: Comparativo Mensal (Mês Atual vs Mês Anterior - Realizado)
   const hoje = new Date();
   const mesAtualNome = hoje.toLocaleDateString('pt-BR', { month: 'long' });
   const mesAnterior = new Date(hoje.setMonth(hoje.getMonth() - 1));
@@ -1276,12 +1252,10 @@ function atualizarGraficos(dataList){
   dataList.forEach(r => {
     const dataRegistro = new Date(r.data + 'T12:00:00');
     const valor = parseFloat(r.valor);
-    // Filtro para o Mês Atual (realizado)
     if (dataRegistro.getMonth() === new Date().getMonth() && dataRegistro.getFullYear() === new Date().getFullYear()) {
       if (r.tipo === "Receber" && r.status === "Recebido") receitaAtual += valor;
       else if (r.tipo === "Pagar" && r.status === "Pago") despesaAtual += valor;
     }
-    // Filtro para o Mês Anterior (realizado)
     if (dataRegistro.getMonth() === mesAnterior.getMonth() && dataRegistro.getFullYear() === mesAnterior.getFullYear()) {
       if (r.tipo === "Receber" && r.status === "Recebido") receitaAnterior += valor;
       else if (r.tipo === "Pagar" && r.status === "Pago") despesaAnterior += valor;
@@ -1291,18 +1265,18 @@ function atualizarGraficos(dataList){
   if(chartCompMensal) chartCompMensal.destroy();
   chartCompMensal = new Chart(ctxCompMensal, {
     type: 'bar',
-    data: {
+     {
       labels: categoriaLabelsComp,
       datasets: [
         {
           label: `Mês Anterior (${mesAnteriorNome})`,
-          data: [receitaAnterior, despesaAnterior],
-          backgroundColor: 'rgba(102,126,234, 0.6)' 
+           [receitaAnterior, despesaAnterior],
+          backgroundColor: 'rgba(74,144,226, 0.6)' 
         },
         {
           label: `Mês Atual (${mesAtualNome})`,
-          data: [receitaAtual, despesaAtual],
-          backgroundColor: 'rgba(79,175,254, 0.8)' 
+           [receitaAtual, despesaAtual],
+          backgroundColor: 'rgba(38,222,129, 0.8)' 
         }
       ]
     },
@@ -1318,7 +1292,6 @@ function atualizarGraficos(dataList){
       }
     }
   });
-  // Gráfico 4: Gastos Diários (Linha - Realizado)
   const gastosPorDia = {};
   const hojeDia = new Date();
   for(let i = 6; i >= 0; i--) {
@@ -1338,16 +1311,16 @@ function atualizarGraficos(dataList){
   if(chartDiario) chartDiario.destroy();
   chartDiario = new Chart(ctxDiario, {
     type: 'line',
-    data: {
+     {
       labels: diasLabels,
       datasets: [{
         label: 'Gastos Diários (Realizado)',
-        data: diasValores,
-        borderColor: var(--pagar-color),
-        backgroundColor: 'rgba(240, 147, 251, 0.1)',
+         diasValores,
+        borderColor: '#ff6b9d',
+        backgroundColor: 'rgba(255, 107, 157, 0.1)',
         tension: 0.4,
         fill: true,
-        pointBackgroundColor: var(--pagar-color),
+        pointBackgroundColor: '#ff6b9d',
         pointBorderColor: currentTheme === 'light' ? '#333' : '#fff',
         pointBorderWidth: 2,
         pointRadius: 5
@@ -1364,7 +1337,6 @@ function atualizarGraficos(dataList){
       }
     }
   });
-  // Gráfico 5: Gastos Mensais por Categoria (Barra Empilhada - Realizado)
   const gastosPorMesECategoria = {};
   const categorias = ["Alimentação", "Moradia/Aluguel", "Transporte", "Lazer", "Saúde", "Educação", "Outros"];
   const mesesLabels = [];
@@ -1380,7 +1352,7 @@ function atualizarGraficos(dataList){
     gastosPorMesECategoria[nomeMes] = {};
     categorias.forEach(cat => gastosPorMesECategoria[nomeMes][cat] = 0);
   }
-  mesesLabels.reverse(); // Garante a ordem cronológica correta
+  mesesLabels.reverse();
   gastosRealizados.forEach(r => {
     if(categorias.includes(r.categoria)) {
       const dataParse = new Date(r.data + 'T12:00:00');
@@ -1403,7 +1375,7 @@ function atualizarGraficos(dataList){
   if(chartMensal) chartMensal.destroy();
   chartMensal = new Chart(ctxMensal, {
     type: 'bar',
-    data: {
+     {
       labels: mesesLabels,
       datasets: datasets
     },
@@ -1420,7 +1392,6 @@ function atualizarGraficos(dataList){
     }
   });
 }
-// Sugestão 4 e 5: Lógica de parcelamento e recorrência
 function toggleParcelaRecorrente() {
     const tipo = document.getElementById("tipo").value;
     const parcelamentoGroup = document.getElementById("parcelamentoGroup");
@@ -1430,10 +1401,9 @@ function toggleParcelaRecorrente() {
         recorrenciaGroup.style.display = 'block';
     } else {
         parcelamentoGroup.style.display = 'none';
-        document.getElementById("parcelas").value = 1; // Reset
-        recorrenciaGroup.style.display = 'block'; // Receita pode ser recorrente
+        document.getElementById("parcelas").value = 1;
+        recorrenciaGroup.style.display = 'block';
     }
-    // Se tiver mais de 1 parcela, não pode ser recorrente
     if (parseInt(document.getElementById("parcelas").value) > 1) {
         document.getElementById("recorrencia").value = 'Nao';
         document.getElementById("recorrencia").disabled = true;
@@ -1468,18 +1438,16 @@ async function carregarRegistros(){
     });
     const data = await resp.json();
     if(Array.isArray(data)) {
-      // Usando 'r.categoria' como campo principal, 'r.campo1' como fallback para compatibilidade com o backend
       registros = data.map((r, idx) => ({
           ...r, 
           row: idx + 1, 
           fav: r.fav || false,
           categoria: r.categoria || r.campo1 || 'Outros',
-          // campo1: r.categoria || r.campo1 || 'Outros', // Mantido para compatibilidade de envio, mas usar 'categoria' na lógica
-          conta: r.conta || 'Conta Corrente', // Adiciona conta
-          recorrente: r.recorrente || 'Nao', // Adiciona recorrente
-          parcelaAtual: parseInt(r.parcelaAtual) || 1, // Adiciona parcelas
+          conta: r.conta || 'Conta Corrente',
+          recorrente: r.recorrente || 'Nao',
+          parcelaAtual: parseInt(r.parcelaAtual) || 1,
           parcelaTotal: parseInt(r.parcelaTotal) || 1,
-          valorOriginal: r.valorOriginal ? parseFloat(r.valorOriginal) : null // Novo para Parcial
+          valorOriginal: r.valorOriginal ? parseFloat(r.valorOriginal) : null
       }));
       atualizarStatusSync(true);
       aplicarFiltros(); 
@@ -1491,7 +1459,6 @@ async function carregarRegistros(){
   }
   mostrarLoading(false);
 }
-// Sugestão 28: Lógica de Regras Automáticas
 function aplicarRegrasAutomacao(descricao, categoria) {
     if (categoria && categoria !== 'Selecione a Categoria') return categoria;
     const termoNormalizado = descricao.toLowerCase().trim();
@@ -1514,7 +1481,6 @@ document.getElementById("financeForm").addEventListener("submit",function(e){
   const campo3=document.getElementById("campo3").value;
   const recorrente = document.getElementById("recorrencia").value;
   const parcelas = tipo === 'Pagar' ? parseInt(document.getElementById("parcelas").value) : 1;
-  // Sugestão 28: Aplica a regra automática se a categoria não foi explicitamente selecionada
   categoria = aplicarRegrasAutomacao(descricao, categoria);
   if(!categoria || categoria === 'Selecione a Categoria') {
     alert("Preencha a Categoria (obrigatória).");
@@ -1522,30 +1488,28 @@ document.getElementById("financeForm").addEventListener("submit",function(e){
   }
   const row=document.getElementById("row").value;
   const sheetRowId=document.getElementById("sheetRowId").value;
-  if(row) { // Edição de registro
+  if(row) {
     const idx = registros.findIndex(r=>r.id == sheetRowId);
     if(idx !== -1) {
       const registroExistente = registros[idx];
       const dadosRegistro = {
-        data: corrigirData(document.getElementById("data").value), tipo, descricao, valor, status, 
+         corrigirData(document.getElementById("data").value), tipo, descricao, valor, status, 
         categoria, campo2, campo3, conta, recorrente,
         parcelaAtual: registroExistente.parcelaAtual, parcelaTotal: registroExistente.parcelaTotal,
-        // Mantém valorOriginal se já existe, senão seta para null
         valorOriginal: registroExistente.valorOriginal || (registroExistente.valor !== valor ? registroExistente.valor : null) 
       };
       registros[idx]={...registroExistente,...dadosRegistro, row:parseInt(row)};
-      enviarParaPlanilha({...registros[idx], action:'update', campo1: categoria}); // Envia categoria como campo1 para backend
+      enviarParaPlanilha({...registros[idx], action:'update', campo1: categoria});
     }
     document.getElementById("row").value="";
     document.getElementById("sheetRowId").value="";
-  } else { // Novo registro (incluindo parcelamento)
-    // Sugestão 4: Parcelamento (cria múltiplos registros)
+  } else {
     if(tipo === 'Pagar' && parcelas > 1) {
         for(let i = 1; i <= parcelas; i++) {
             const dataParcela = new Date(document.getElementById("data").value + 'T12:00:00');
             dataParcela.setMonth(dataParcela.getMonth() + (i - 1));
             const novoRegistro = {
-                data: corrigirData(dataParcela.toISOString().split('T')[0]), 
+                 corrigirData(dataParcela.toISOString().split('T')[0]), 
                 tipo, descricao: `${descricao} (${i}/${parcelas})`, 
                 valor: valor, status, categoria, campo2, campo3, conta, 
                 recorrente: 'Nao', 
@@ -1558,10 +1522,9 @@ document.getElementById("financeForm").addEventListener("submit",function(e){
             enviarParaPlanilha({...novoRegistro, action:'add', campo1: categoria});
         }
     } 
-    // Sugestão 5: Recorrência
     else if (recorrente === 'Sim') {
         const novoRegistro = {
-            data: corrigirData(document.getElementById("data").value), tipo, descricao, valor, status, 
+             corrigirData(document.getElementById("data").value), tipo, descricao, valor, status, 
             categoria, campo2, campo3, conta, recorrente,
             parcelaAtual: 1, parcelaTotal: 1,
             row: registros.length + 1, fav: false
@@ -1570,10 +1533,9 @@ document.getElementById("financeForm").addEventListener("submit",function(e){
         enviarParaPlanilha({...novoRegistro, action:'add', campo1: categoria});
         alert(`✅ Recorrente salvo! A rotina de automação criará os próximos lançamentos.`);
     }
-    // Registro Simples
     else {
         const novoRegistro = {
-            data: corrigirData(document.getElementById("data").value), tipo, descricao, valor, status, 
+             corrigirData(document.getElementById("data").value), tipo, descricao, valor, status, 
             categoria, campo2, campo3, conta, recorrente: 'Nao',
             parcelaAtual: 1, parcelaTotal: 1,
             row: registros.length + 1, fav: false
@@ -1586,7 +1548,7 @@ document.getElementById("financeForm").addEventListener("submit",function(e){
   document.getElementById("data").valueAsDate=new Date();
   document.getElementById("parcelas").value = 1;
   document.getElementById("recorrencia").value = 'Nao';
-  toggleParcelaRecorrente(); // Restaura estado inicial
+  toggleParcelaRecorrente();
   mostraApenasFav = false;
   document.getElementById("btnFiltrarFav").classList.remove("active");
   aplicarFiltros(); 
@@ -1603,7 +1565,6 @@ document.getElementById("filtroPeriodo").addEventListener("change", function() {
     aplicarFiltros();
 });
 document.getElementById("diasCustomizados").addEventListener("input", aplicarFiltros);
-// Sugestão 16: Pesquisa Avançada e Filtro por Categoria
 function aplicarFiltros() {
     const termo = document.getElementById("buscar").value.toLowerCase();
     const categoriaFiltro = document.getElementById("filtroCategoria").value;
@@ -1617,7 +1578,6 @@ function aplicarFiltros() {
     let totalReceberPeriodo = 0;
     let dataFiltroAtivo = false;
     let dataInicioFiltro, dataFimFiltro;
-    // Lógica de Período Dinâmico/Customizado
     if (periodoSelecionado !== 'all') {
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0); 
@@ -1665,7 +1625,6 @@ function aplicarFiltros() {
             return dataRegistro >= dataInicioFiltro && dataRegistro <= dataFimFiltro;
         });
     }
-    // Filtro por Status
     if (filtroStatusAtual !== 'todos') {
         if (filtroStatusAtual === 'tipo-pagar') {
             filtrados = filtrados.filter(r => r.tipo === 'Pagar');
@@ -1675,21 +1634,18 @@ function aplicarFiltros() {
             filtrados = filtrados.filter(r => r.status === filtroStatusAtual);
         }
     }
-    // Filtro por Favorito
     if (mostraApenasFav) {
         filtrados = filtrados.filter(r => r.fav);
     }
-    // Filtro por Categoria
     if (categoriaFiltro !== 'all') {
         filtrados = filtrados.filter(r => r.categoria === categoriaFiltro);
     }
-    // Filtro por Termo (Busca Avançada)
     if (termo) {
         filtrados = filtrados.filter(r => 
             r.descricao.toLowerCase().includes(termo) || 
             r.tipo.toLowerCase().includes(termo) || 
             r.categoria.toLowerCase().includes(termo) ||
-            r.conta.toLowerCase().includes(termo) || // Busca por Conta
+            r.conta.toLowerCase().includes(termo) ||
             r.data.includes(termo)
         );
     }
@@ -1712,7 +1668,6 @@ document.getElementById("btnFiltrarFav").addEventListener("click", function(){
   this.classList.toggle("active");
   aplicarFiltros();
 });
-// Sugestão 14: Filtros Salvos
 function carregarFiltroSalvo(filtro) {
     if (filtro === 'alimentacao90') {
         document.getElementById('filtroPeriodo').value = '90';
@@ -1722,10 +1677,9 @@ function carregarFiltroSalvo(filtro) {
         mostraApenasFav = false;
         document.getElementById("btnFiltrarFav").classList.remove("active");
     } 
-    document.getElementById('filtroSalvo').value = ''; // Reset do select salvo
+    document.getElementById('filtroSalvo').value = '';
     aplicarFiltros();
 }
-// Sugestão 15: Modo Compacto/Expandido
 function toggleCompactMode(button) {
     const table = document.getElementById('tabelaFinance');
     if (table.classList.contains('table-compact')) {
@@ -1785,13 +1739,7 @@ function atualizarCardMeta(gastoHoje, gastoMes) {
     } else if(percentual >= 70) {
         progressBar.classList.add('warning');
     }
-    // Sugestão 11: Alertas Inteligentes (Simplificado)
-    if (percentual >= 80) {
-        // Alerta de meta global (se estivesse no escopo, seria uma notificação push/popup)
-        // alert(`🔔 Alerta de Meta: Você atingiu ${percentual.toFixed(0)}% da sua meta de gastos ${metaTipo === 'diario' ? 'diária' : 'mensal'}!`);
-    }
 }
-// Novo: Sugestão 10 - Atualizar Card de Objetivo de Economia
 function atualizarCardObjetivo() {
     const valorMensalNecessario = objetivoMeses > 0 ? objetivoEconomia / objetivoMeses : 0;
     document.getElementById("objetivoValorDisplay").innerText = formatarMoeda(objetivoEconomia);
@@ -1842,7 +1790,7 @@ Digite o novo valor (ex: 5000):`, metaValor);
                 alert('❌ Valor inválido! Digite um número positivo.');
             }
         }
-    } else if (type === 'objetivo') { // Novo: Edição de Meta de Poupança/Investimento
+    } else if (type === 'objetivo') {
         const novoObjetivo = prompt(`Objetivo de Economia/Investimento:
 Valor Atual: R$ ${objetivoEconomia.toFixed(2)}
 Digite o valor total do objetivo (ex: 10000):`, objetivoEconomia);
@@ -1876,7 +1824,6 @@ Digite o novo prazo (ex: 12):`, objetivoMeses);
         atualizarCardObjetivo();
         alert(`✅ Objetivo atualizado: ${formatarMoeda(objetivoEconomia)} em ${objetivoMeses} meses.`);
     } else {
-        // Sugestão 8: Edição de Metas por Categoria
         const cat = prompt(`Digite a categoria para definir/editar a meta (ex: Alimentação):`);
         if (!cat) return;
         const valorAtual = metasPorCategoria[cat] || 0;
@@ -1894,18 +1841,16 @@ Digite o novo valor (0 para remover):`, valorAtual);
                     alert(`✅ Meta para ${cat} definida em ${formatarMoeda(novoValor)}.`);
                 }
                 localStorage.setItem('metasPorCategoria', JSON.stringify(metasPorCategoria));
-                atualizarCardsGlobais(registros); // Para recalcular e atualizar o resumo das metas
+                atualizarCardsGlobais(registros);
             } else {
                 alert('❌ Valor inválido! Digite um número positivo ou zero.');
             }
         }
     }
 }
-// Sugestão 8: Resumo das Metas por Categoria
 function atualizarCategoryMetas(dataList) {
     const summaryDiv = document.getElementById("categoryMetasSummary");
     summaryDiv.innerHTML = '';
-    // Gasto Realizado do Mês (status 'Pago')
     const gastosMesPorCategoria = dataList.filter(r => r.tipo === "Pagar" && r.status === "Pago")
         .reduce((acc, r) => {
             const dataRegistro = new Date(r.data + 'T12:00:00');
@@ -1949,7 +1894,6 @@ function atualizarCategoryMetas(dataList) {
         summaryDiv.appendChild(item);
     });
 }
-// Sugestão 12: Calendário Financeiro
 function renderizarCalendario(dataList) {
     const calDiv = document.getElementById('financialCalendar');
     calDiv.innerHTML = '<div class="calendar-header">Dom</div><div class="calendar-header">Seg</div><div class="calendar-header">Ter</div><div class="calendar-header">Qua</div><div class="calendar-header">Qui</div><div class="calendar-header">Sex</div><div class="calendar-header">Sáb</div>';
@@ -1960,26 +1904,23 @@ function renderizarCalendario(dataList) {
     const primeiroDia = new Date(ano, mes, 1);
     const ultimoDia = new Date(ano, mes + 1, 0);
     const diasNoMes = ultimoDia.getDate();
-    const diaDaSemanaInicio = primeiroDia.getDay(); // 0 (Dom) a 6 (Sáb)
-    // Preencher células vazias no início
+    const diaDaSemanaInicio = primeiroDia.getDay();
     for (let i = 0; i < diaDaSemanaInicio; i++) {
         calDiv.innerHTML += '<div class="calendar-day" style="background:none; border:none;"></div>';
     }
-    // Coletar eventos do mês
     const eventosDoMes = dataList.filter(r => {
         const dataReg = new Date(r.data + 'T12:00:00');
         return dataReg.getFullYear() === ano && dataReg.getMonth() === mes;
     }).reduce((acc, r) => {
         const dia = new Date(r.data + 'T12:00:00').getDate();
         if (!acc[dia]) acc[dia] = { pagar: 0, receber: 0, itens: [] };
-        if (r.status === 'Pendente') { // Apenas pendentes para o calendário (lembretes)
+        if (r.status === 'Pendente') {
             if (r.tipo === 'Pagar') acc[dia].pagar += parseFloat(r.valor);
             else if (r.tipo === 'Receber') acc[dia].receber += parseFloat(r.valor);
             acc[dia].itens.push(r);
         }
         return acc;
     }, {});
-    // Preencher dias do mês
     for (let dia = 1; dia <= diasNoMes; dia++) {
         const diaDiv = document.createElement('div');
         diaDiv.classList.add('calendar-day');
@@ -1994,12 +1935,6 @@ function renderizarCalendario(dataList) {
         if (eventosDoMes[dia]) {
             if (eventosDoMes[dia].pagar > 0) {
                 diaHtml += `<div class="day-pagar">P: ${formatarMoeda(eventosDoMes[dia].pagar)}</div>`;
-                // Sugestão 11: Avisos de contas próximas do vencimento (simplificado)
-                const dataVenc = new Date(ano, mes, dia);
-                const diffDias = Math.ceil((dataVenc - hoje) / (1000 * 60 * 60 * 24));
-                if (diffDias >= 0 && diffDias <= 3) {
-                    // console.log(`Alerta: Contas a pagar vencem em ${diffDias} dias!`);
-                }
             }
             if (eventosDoMes[dia].receber > 0) {
                 diaHtml += `<div class="day-receber">R: ${formatarMoeda(eventosDoMes[dia].receber)}</div>`;
@@ -2009,7 +1944,6 @@ function renderizarCalendario(dataList) {
         calDiv.appendChild(diaDiv);
     }
 }
-// Novo: Sugestão 18 - Lógica de Pagamento Parcial
 function pagamentoParcial(row) {
     const registro = registros.find(r => r.row === row);
     if (!registro || registro.tipo !== 'Pagar' || registro.status !== 'Pendente') return;
@@ -2029,7 +1963,7 @@ Digite o valor a pagar (máx: ${formatarMoeda(valorAtual)}):`);
         return;
     }
     const novoValorRestante = valorAtual - valorPago;
-    if (novoValorRestante <= 0.01) { // Considera pago se o restante for mínimo
+    if (novoValorRestante <= 0.01) {
         registro.valor = 0;
         registro.status = 'Pago';
         registro.valorOriginal = valorOriginal; 
@@ -2039,7 +1973,6 @@ Digite o valor a pagar (máx: ${formatarMoeda(valorAtual)}):`);
         registro.valorOriginal = valorOriginal; 
         alert(`✅ ${formatarMoeda(valorPago)} pago. Saldo restante: ${formatarMoeda(novoValorRestante)}.`);
     }
-    // Envia a alteração para a planilha
     enviarParaPlanilha({...registro, action:'update', campo1: registro.categoria});
     aplicarFiltros(); 
 }
@@ -2048,21 +1981,17 @@ function mudarStatus(row) {
   if(!registro) return;
   let novoStatus = registro.status;
   if(registro.status === "Pendente") {
-    // Para marcar como Pago/Recebido, o valor deve ser o valor total original
     novoStatus = registro.tipo === "Pagar" ? "Pago" : "Recebido";
     if (registro.valorOriginal && parseFloat(registro.valorOriginal) > parseFloat(registro.valor)) {
-        // Se houver saldo parcial, pergunta se quer pagar o restante
         if (!confirm(`O saldo devedor é ${formatarMoeda(parseFloat(registro.valor))}. Deseja marcar como '${novoStatus}' (assumindo que o restante foi pago)?`)) {
             return;
         }
     }
-    // Ao marcar como Pago/Recebido, reseta o valor para o valorOriginal para a planilha, e zera o valor do registro.
     if (registro.valorOriginal) {
         registro.valor = registro.valorOriginal;
     }
-    registro.valorOriginal = null; // Reseta o controle parcial
+    registro.valorOriginal = null;
   } else {
-    // Ao reverter, o valor volta ao que era, mas sem valorOriginal
     novoStatus = "Pendente";
     registro.valorOriginal = null;
   }
@@ -2071,7 +2000,6 @@ function mudarStatus(row) {
   aplicarFiltros(); 
 }
 function exportarExcel(){
-    // ... (Lógica de filtro de exportação, mantida a original para brevidade) ...
     const termo = document.getElementById("buscar").value.toLowerCase();
     const periodoSelecionado = document.getElementById("filtroPeriodo").value; 
     let dataInicioStr = document.getElementById("dataInicio").value;
@@ -2156,7 +2084,7 @@ function exportarExcel(){
     r.descricao,
     r.categoria || '-',
     r.valor,
-    r.valorOriginal ? r.valorOriginal : '', // Valor Original (para parciais)
+    r.valorOriginal ? r.valorOriginal : '',
     r.status,
     r.conta || 'N/A', 
     r.recorrente, 
@@ -2177,15 +2105,14 @@ function editar(row){
     document.getElementById("sheetRowId").value=r.id;
     document.getElementById("data").value=r.data;
     document.getElementById("tipo").value=r.tipo;
-    // Se for edição de um parcial, o valor exibido é o restante (valor)
     document.getElementById("valor").value=r.valor; 
     document.getElementById("status").value=r.status;
-    document.getElementById("descricao").value=r.descricao.replace(/\s\(\d+\/\d+\)$/, ''); // Remove a marcação de parcela na edição
+    document.getElementById("descricao").value=r.descricao.replace(/\s\(\d+\/\d+\)$/, '');
     document.getElementById("categoria").value=r.categoria || '';
     document.getElementById("conta").value=r.conta || 'Conta Corrente';
     document.getElementById("recorrencia").value=r.recorrente || 'Nao';
     document.getElementById("parcelas").value=r.parcelaTotal || 1;
-    toggleParcelaRecorrente(); // Atualiza a visibilidade e estado
+    toggleParcelaRecorrente();
     document.getElementById("campo2").value=r.campo2||'';
     document.getElementById("campo3").value=r.campo3||'';
     window.scrollTo({top:0,behavior:'smooth'});
@@ -2208,7 +2135,6 @@ function toggleFav(row){
   enviarParaPlanilha({...registros[idx],action:'update'});
   aplicarFiltros();
 }
-// Sugestão 28: Auto-preenchimento de categoria
 document.getElementById("descricao").addEventListener("input", function() {
     const categoriaAtual = document.getElementById("categoria").value;
     if (!categoriaAtual || categoriaAtual === 'Selecione a Categoria') {
@@ -2218,7 +2144,6 @@ document.getElementById("descricao").addEventListener("input", function() {
         }
     }
 });
-// Novo: Sugestão 25 - Lógica do FAB
 function toggleQuickMenu() {
     document.getElementById('quickMenu').classList.toggle('visible');
 }
@@ -2226,23 +2151,24 @@ function focarFormulario(tipo) {
     document.getElementById("tipo").value = tipo;
     toggleParcelaRecorrente();
     document.getElementById("descricao").focus();
-    toggleQuickMenu(); // Fecha o menu
+    toggleQuickMenu();
     window.scrollTo({top: 0, behavior: 'smooth'});
 }
+// ✅ REMOVIDA verificação de login no keydown
 document.addEventListener('keydown', (e) => {
-    // Removida a verificação de autenticação
     if (e.key === '+' || e.key.toLowerCase() === 'n') {
         e.preventDefault();
         document.getElementById("descricao").focus();
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
 });
+// ✅ INICIALIZAÇÃO SEM LOGIN
 document.getElementById("data").valueAsDate=new Date();
-// Inicialização direta
 applyTheme();
-toggleParcelaRecorrente(); // Define o estado inicial
-atualizarCardObjetivo(); // Inicializa o card de objetivo
-carregarRegistros(); // Carrega registros imediatamente
+toggleParcelaRecorrente();
+atualizarCardObjetivo();
+carregarRegistros();
+// ✅ Sincronização automática SEM condição de login
 setInterval(() => {
   carregarRegistros();
   console.log("↻ Sincronizando...");
