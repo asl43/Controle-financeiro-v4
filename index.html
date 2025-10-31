@@ -1311,7 +1311,6 @@ tr:hover {
     </div>
     <button class="fab" onclick="toggleQuickMenu()">+</button>
 </div>
-
 <script>
 // ============================================
 // VARIÁVEIS GLOBAIS
@@ -1342,6 +1341,8 @@ const regrasAutomacao = [
     { termo: "aluguel", categoria: "Moradia/Aluguel" }
 ];
 
+// ATENÇÃO: Se o seu Web App retornar JSON, mantenha o Content-Type como text/plain
+// e a URL DEVE ser a URL do Web App Apps Script (implantado como "Qualquer pessoa").
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx4Ng3BXxgOuDIZ-P-9i7KFVheEZ1K30s-4p3-1NOFZnBxQZTiBw96otqfpOxaeeoY/exec";
 const SENHA_ACESSO = "nanl250612";
 
@@ -1368,7 +1369,8 @@ function applyTheme() {
     document.documentElement.setAttribute('data-theme', currentTheme);
     document.getElementById('themeIcon').innerText = currentTheme === 'light' ? '🌙' : '☀️';
     document.getElementById('themeText').innerText = currentTheme === 'light' ? 'Modo Escuro' : 'Modo Claro';
-    if(chart) atualizarGraficos(registros);
+    // Se o gráfico existir, atualiza suas cores/opções
+    if(chart) atualizarGraficos(registros); 
 }
 
 function mostrarLoading(show) {
@@ -1430,27 +1432,41 @@ async function enviarParaPlanilha(dados) {
         
         const resp = await fetch(WEB_APP_URL, {
             method: 'POST',
-            mode: 'no-cors', // Importante para Apps Script
+            // mode: 'no-cors', // REMOVIDO: para permitir a leitura do JSON de resposta
+            redirect: 'follow', // Adicionado: para lidar com redirecionamentos
             headers: {
-                'Content-Type': 'application/json'
+                // Manter text/plain se o Apps Script estiver configurado para isso
+                'Content-Type': 'text/plain' 
             },
             body: JSON.stringify(dados)
         });
         
-        // Como usamos no-cors, não conseguimos ler a resposta
-        // Mas sabemos que foi enviado com sucesso
-        atualizarStatusSync(true);
-        mostrarLoading(false);
+        // Tenta ler o JSON de resposta (só funciona sem no-cors)
+        const data = await resp.json();
         
-        // Aguarda um pouco e recarrega os dados
-        setTimeout(() => carregarRegistros(), 500);
-        
-        return { sucesso: true };
+        if (data && data.status === 'success') {
+            console.log(`✓ Ação de ${dados.action} sincronizada.`);
+            atualizarStatusSync(true);
+            // Recarrega os dados para atualizar a tabela na tela
+            setTimeout(() => carregarRegistros(), 500);
+            return { sucesso: true };
+        } else if (data && data.erro) {
+            console.error("Erro do Apps Script:", data.erro);
+            atualizarStatusSync(false);
+            // alert(`⚠️ Erro ao sincronizar: ${data.erro}`); // ALERTA REMOVIDO
+            return { erro: data.erro };
+        } else {
+             // Caso a resposta não seja JSON válida ou sucesso esperado (pode ocorrer com no-cors)
+             console.log("Ação enviada. Recarregando dados para confirmar.");
+             atualizarStatusSync(true);
+             setTimeout(() => carregarRegistros(), 500);
+             return { sucesso: true };
+        }
     } catch(e) {
-        console.error("Erro ao sincronizar:", e);
+        console.error("Erro ao sincronizar na camada cliente:", e);
         atualizarStatusSync(false);
+        // alert("⚠️ Erro ao sincronizar. Verifique sua conexão."); // ALERTA REMOVIDO
         mostrarLoading(false);
-        alert("⚠️ Erro ao sincronizar. Verifique sua conexão.");
         return { erro: e.toString() };
     }
 }
@@ -1482,20 +1498,28 @@ async function carregarRegistros() {
                 recorrente: r.recorrente || 'Nao',
                 parcelaAtual: parseInt(r.parcelaAtual) || 1,
                 parcelaTotal: parseInt(r.parcelaTotal) || 1,
-                valorOriginal: r.valorOriginal ? parseFloat(r.valorOriginal) : null
+                valorOriginal: r.valorOriginal ? parseFloat(r.valorOriginal) : null,
+                // Garantir que valor seja float
+                valor: parseFloat(r.valor) 
             }));
             atualizarStatusSync(true);
             aplicarFiltros();
+            
+            // NOVO: Chama a atualização dos Cards e do Calendário
+            atualizarCardsGlobais(registros);
+            renderizarCalendario(registros);
+            
             console.log("✓ Carregados " + registros.length + " registros da planilha");
         } else if(data.erro) {
             console.error("Erro do servidor:", data.erro);
             atualizarStatusSync(false);
-            alert("⚠️ Erro: " + data.erro);
+            // alert("⚠️ Erro: " + data.erro); // ALERTA REMOVIDO
         }
     } catch(e) {
         console.error("Erro ao carregar:", e);
         atualizarStatusSync(false);
-        alert("⚠️ Erro ao carregar dados. Verifique:\n1. Se a URL do Apps Script está correta\n2. Se o Web App foi implantado corretamente\n3. Se tem acesso à internet");
+        // ALERTA REMOVIDO
+        /* alert("⚠️ Erro ao carregar dados. Verifique:\n1. Se a URL do Apps Script está correta\n2. Se o Web App foi implantado corretamente\n3. Se tem acesso à internet");*/
     }
     mostrarLoading(false);
 }
@@ -1503,6 +1527,63 @@ async function carregarRegistros() {
 // ============================================
 // CÁLCULOS E CARDS
 // ============================================
+function atualizarCardsGlobais(dataList) {
+    const hoje = new Date();
+    const hojeStr = hoje.toISOString().split('T')[0];
+    const mesAtual = hoje.getMonth();
+    const anoAtual = hoje.getFullYear();
+    const seteDiasFrente = new Date();
+    seteDiasFrente.setDate(hoje.getDate() + 7);
+    
+    let totalPagar = 0, totalReceber = 0, totalDia = 0, totalVencidos = 0, vencemSeteDias = 0, gastoHoje = 0;
+    let entradasMes = 0, saidasMes = 0;
+    
+    dataList.forEach(r => {
+        const dataRegistro = new Date(r.data + 'T12:00:00');
+        const valor = parseFloat(r.valor);
+
+        if(r.status === 'Pendente') {
+            if(r.tipo === 'Pagar') {
+                totalPagar += valor;
+                if(dataRegistro < hoje) totalVencidos += valor;
+                if(dataRegistro >= hoje && dataRegistro <= seteDiasFrente) vencemSeteDias += valor;
+            } else if(r.tipo === 'Receber') {
+                totalReceber += valor;
+            }
+        }
+        
+        if(r.data === hojeStr) {
+            if(r.tipo === 'Pagar' && r.status === 'Pago') gastoHoje += valor;
+        }
+
+        if(dataRegistro.getMonth() === mesAtual && dataRegistro.getFullYear() === anoAtual) {
+            if(r.tipo === 'Receber' && r.status === 'Recebido') entradasMes += valor;
+            else if(r.tipo === 'Pagar' && r.status === 'Pago') saidasMes += valor;
+        }
+    });
+    
+    // Cálculo do Saldo do Dia (simplificado: Saldo = Recebimentos Pendentes - Pagamentos Pendentes)
+    // Se quiser o Saldo Geral (Entradas Realizadas - Saídas Realizadas), mude a lógica.
+    totalDia = totalReceber - totalPagar; 
+
+    document.getElementById("totalPagar").innerText = formatarMoeda(totalPagar);
+    document.getElementById("totalReceber").innerText = formatarMoeda(totalReceber);
+    document.getElementById("totalDia").innerText = formatarMoeda(totalDia);
+    document.getElementById("totalVencidos").innerText = formatarMoeda(totalVencidos);
+    document.getElementById("vencemSeteDias").innerText = formatarMoeda(vencemSeteDias);
+    document.getElementById("gastoHoje").innerText = formatarMoeda(gastoHoje);
+    
+    const sobraFaltaMes = entradasMes - saidasMes;
+    document.getElementById("sobraFaltaMes").innerText = formatarMoeda(sobraFaltaMes);
+    document.getElementById("cardSobraMes").className = sobraFaltaMes >= 0 ? 'card card-receber' : 'card card-pagar';
+
+    // Médias e Metas
+    atualizarCardMeta(gastoHoje, saidasMes);
+    atualizarCategoryMetas(dataList);
+    // A média de 3 meses não foi implementada neste trecho, mas seria calculada aqui.
+}
+
+
 function atualizarCardMeta(gastoHoje, gastoMes) {
     const label = metaTipo === 'diario' ? 'Meta de Gastos (Dia)' : 'Meta de Gastos (Mês)';
     const gastoAtual = metaTipo === 'diario' ? gastoHoje : gastoMes;
@@ -1595,7 +1676,7 @@ function mostrarRegistros(lista) {
     const tbody = document.querySelector("#tabelaFinance tbody");
     tbody.innerHTML = "";
     
-    atualizarCardsGlobais(registros);
+    // Removido 'atualizarCardsGlobais(registros);' daqui, pois agora é chamado em carregarRegistros()
     
     lista.forEach(r => {
         const tr = document.createElement("tr");
@@ -1632,6 +1713,7 @@ function mostrarRegistros(lista) {
         tbody.appendChild(tr);
     });
     
+    // Apenas gráficos (que dependem da lista completa)
     atualizarGraficos(registros);
 }
 
@@ -1693,7 +1775,11 @@ function atualizarGraficos(dataList) {
         }
     });
 
-    const mesesFluxo = Object.keys(dadosFluxo).sort();
+    const mesesFluxo = Object.keys(dadosFluxo).sort((a, b) => {
+        const [mA, aA] = a.split('/');
+        const [mB, aB] = b.split('/');
+        return aA - aB || new Date(`1/${mA}/20${aA}`).getTime() - new Date(`1/${mB}/20${aB}`).getTime();
+    });
     
     const ctxFluxoCaixa = document.getElementById('graficoFluxoCaixa').getContext('2d');
     if(chartFluxoCaixa) chartFluxoCaixa.destroy();
@@ -1721,7 +1807,8 @@ function atualizarGraficos(dataList) {
     const hoje = new Date();
     const mesAtual = hoje.getMonth();
     const anoAtual = hoje.getFullYear();
-    const mesAnterior = new Date(hoje.setMonth(hoje.getMonth() - 1));
+    const mesAnterior = new Date(hoje);
+    mesAnterior.setMonth(hoje.getMonth() - 1);
     
     let receitaAtual = 0, despesaAtual = 0, receitaAnterior = 0, despesaAnterior = 0;
     
@@ -1729,7 +1816,7 @@ function atualizarGraficos(dataList) {
         const dataRegistro = new Date(r.data + 'T12:00:00');
         const valor = parseFloat(r.valor);
         
-        if(dataRegistro.getMonth() === new Date().getMonth() && dataRegistro.getFullYear() === new Date().getFullYear()) {
+        if(dataRegistro.getMonth() === mesAtual && dataRegistro.getFullYear() === anoAtual) {
             if(r.tipo === "Receber" && r.status === "Recebido") receitaAtual += valor;
             else if(r.tipo === "Pagar" && r.status === "Pago") despesaAtual += valor;
         }
@@ -1862,6 +1949,7 @@ function atualizarGraficos(dataList) {
         }
     });
 }
+
 
 // ============================================
 // CALENDÁRIO
@@ -2015,6 +2103,9 @@ function aplicarFiltros() {
     } else {
         summaryDiv.classList.add('hidden');
     }
+    
+    // Atualiza os contadores de filtros da aba
+    atualizarContadoresFiltros(filtrados);
 
     mostrarRegistros(filtrados);
 }
@@ -2094,46 +2185,46 @@ document.getElementById("financeForm").addEventListener("submit", function(e) {
     const sheetRowId = document.getElementById("sheetRowId").value;
     
     if(row) {
-        const idx = registros.findIndex(r => r.id == sheetRowId);
+        const idx = registros.findIndex(r => r.row == row); // Busca pelo 'row' temporário
         if(idx !== -1) {
             const registroExistente = registros[idx];
             const dadosRegistro = {
                 data: corrigirData(document.getElementById("data").value), tipo, descricao, valor, status,
                 categoria, campo2, campo3, conta, recorrente,
                 parcelaAtual: registroExistente.parcelaAtual, parcelaTotal: registroExistente.parcelaTotal,
-                valorOriginal: registroExistente.valorOriginal || (registroExistente.valor !== valor ? registroExistente.valor : null)
+                valorOriginal: registroExistente.valorOriginal || (registroExistente.valor !== valor ? registroExistente.valor : null),
+                id: registroExistente.id // Usa o ID real para a atualização
             };
-            registros[idx] = {...registroExistente, ...dadosRegistro, row: parseInt(row)};
-            enviarParaPlanilha({...registros[idx], action: 'update', campo1: categoria});
+            // Não atualizamos o array local imediatamente, pois a recarga fará isso
+            enviarParaPlanilha({...dadosRegistro, action: 'update', campo1: categoria});
         }
         document.getElementById("row").value = "";
         document.getElementById("sheetRowId").value = "";
     } else {
+        // Lógica de adição (parcelada ou recorrente)
         if(tipo === 'Pagar' && parcelas > 1) {
-            for(let i = 1; i <= parcelas; i++) {
-                const dataParcela = new Date(document.getElementById("data").value + 'T12:00:00');
-                dataParcela.setMonth(dataParcela.getMonth() + (i - 1));
-                const novoRegistro = {
-                    data: corrigirData(dataParcela.toISOString().split('T')[0]),
-                    tipo, descricao: `${descricao} (${i}/${parcelas})`,
-                    valor: valor, status, categoria, campo2, campo3, conta,
-                    recorrente: 'Nao',
-                    parcelaAtual: i,
-                    parcelaTotal: parcelas,
-                    row: registros.length + i,
-                    fav: false
-                };
-                registros.push(novoRegistro);
-                enviarParaPlanilha({...novoRegistro, action: 'add', campo1: categoria});
-            }
+            // Apenas adiciona o primeiro, o Apps Script cuida do resto
+            const dataParcela = new Date(document.getElementById("data").value + 'T12:00:00');
+            const novoRegistro = {
+                data: corrigirData(dataParcela.toISOString().split('T')[0]),
+                tipo, descricao: descricao, // Apps Script ajusta a descrição com (1/N)
+                valor: valor, status, categoria, campo2, campo3, conta,
+                recorrente: 'Nao',
+                parcelaAtual: 1,
+                parcelaTotal: parcelas,
+                row: -1, // Marcador temporário
+                fav: false
+            };
+            enviarParaPlanilha({...novoRegistro, action: 'addParcela', campo1: categoria}); // Novo action para Apps Script
+            alert(`✅ Lançamento parcelado salvo! As ${parcelas} parcelas serão criadas.`);
         } else if(recorrente === 'Sim') {
             const novoRegistro = {
                 data: corrigirData(document.getElementById("data").value), tipo, descricao, valor, status,
                 categoria, campo2, campo3, conta, recorrente,
                 parcelaAtual: 1, parcelaTotal: 1,
-                row: registros.length + 1, fav: false
+                row: -1, // Marcador temporário
+                fav: false
             };
-            registros.push(novoRegistro);
             enviarParaPlanilha({...novoRegistro, action: 'add', campo1: categoria});
             alert(`✅ Recorrente salvo! A rotina criará os próximos lançamentos.`);
         } else {
@@ -2141,9 +2232,9 @@ document.getElementById("financeForm").addEventListener("submit", function(e) {
                 data: corrigirData(document.getElementById("data").value), tipo, descricao, valor, status,
                 categoria, campo2, campo3, conta, recorrente: 'Nao',
                 parcelaAtual: 1, parcelaTotal: 1,
-                row: registros.length + 1, fav: false
+                row: -1, // Marcador temporário
+                fav: false
             };
-            registros.push(novoRegistro);
             enviarParaPlanilha({...novoRegistro, action: 'add', campo1: categoria});
         }
     }
@@ -2155,20 +2246,23 @@ document.getElementById("financeForm").addEventListener("submit", function(e) {
     toggleParcelaRecorrente();
     mostraApenasFav = false;
     document.getElementById("btnFiltrarFav").classList.remove("active");
-    aplicarFiltros();
+    // Removido aplicarFiltros() daqui, pois ele será chamado após a recarga em enviarParaPlanilha
     document.getElementById("descricao").focus();
 });
+
 
 function editar(row) {
     const r = registros.find(r => r.row === row);
     if(r) {
         document.getElementById("row").value = r.row;
-        document.getElementById("sheetRowId").value = r.id;
+        document.getElementById("sheetRowId").value = r.id; // Guarda o ID do Apps Script
         document.getElementById("data").value = r.data;
         document.getElementById("tipo").value = r.tipo;
         document.getElementById("valor").value = r.valor;
         document.getElementById("status").value = r.status;
-        document.getElementById("descricao").value = r.descricao.replace(/\s\(\d+\/\d+\)$/, '');
+        // Limpa a descrição se for uma parcela, para facilitar a edição
+        const descricaoLimpa = r.parcelaTotal > 1 ? r.descricao.replace(/\s\(\d+\/\d+\)$/, '') : r.descricao;
+        document.getElementById("descricao").value = descricaoLimpa; 
         document.getElementById("categoria").value = r.categoria || '';
         document.getElementById("conta").value = r.conta || 'Conta Corrente';
         document.getElementById("recorrencia").value = r.recorrente || 'Nao';
@@ -2185,7 +2279,8 @@ function excluir(row) {
         const r = registros.find(r => r.row === row);
         const idx = registros.findIndex(r => r.row === row);
         enviarParaPlanilha({...r, action: 'delete'});
-        registros.splice(idx, 1);
+        // A recarga de dados após a sincronização é quem vai remover o item visualmente
+        // registros.splice(idx, 1); // Removido
         mostraApenasFav = false;
         document.getElementById("btnFiltrarFav").classList.remove("active");
         aplicarFiltros();
@@ -2196,7 +2291,7 @@ function toggleFav(row) {
     const idx = registros.findIndex(r => r.row === row);
     registros[idx].fav = !registros[idx].fav;
     enviarParaPlanilha({...registros[idx], action: 'update'});
-    aplicarFiltros();
+    // A recarga de dados após a sincronização é quem vai atualizar o ícone visualmente
 }
 
 function mudarStatus(row) {
@@ -2222,7 +2317,7 @@ function mudarStatus(row) {
     
     registro.status = novoStatus;
     enviarParaPlanilha({...registro, action: 'update', campo1: registro.categoria});
-    aplicarFiltros();
+    // A recarga de dados após a sincronização é quem vai atualizar o status visualmente
 }
 
 function pagamentoParcial(row) {
@@ -2251,7 +2346,7 @@ function pagamentoParcial(row) {
     const novoValorRestante = valorAtual - valorPago;
     
     if(novoValorRestante <= 0.01) {
-        registro.valor = 0;
+        registro.valor = 0; // Se o pagamento for total ou quase, zera o valor e marca como pago
         registro.status = 'Pago';
         registro.valorOriginal = valorOriginal;
         alert(`✅ ${formatarMoeda(valorPago)} pago. Registro marcado como 'Pago'.`);
@@ -2262,7 +2357,7 @@ function pagamentoParcial(row) {
     }
 
     enviarParaPlanilha({...registro, action: 'update', campo1: registro.categoria});
-    aplicarFiltros();
+    // A recarga de dados após a sincronização é quem vai atualizar os valores visualmente
 }
 
 function editarMeta(type) {
@@ -2291,7 +2386,6 @@ function editarMeta(type) {
                 localStorage.setItem('metaValor', metaValor);
                 
                 const hoje = new Date();
-                const hojeStr = hoje.toISOString().split('T')[0];
                 const mesAtual = hoje.getMonth();
                 const anoAtual = hoje.getFullYear();
                 
@@ -2299,7 +2393,7 @@ function editarMeta(type) {
                 registros.forEach(r => {
                     const dataRegistro = new Date(r.data + 'T12:00:00');
                     const valor = parseFloat(r.valor);
-                    if(r.data === hojeStr && r.tipo === "Pagar" && r.status === "Pago") gastoHoje += valor;
+                    if(r.data === hoje.toISOString().split('T')[0] && r.tipo === "Pagar" && r.status === "Pago") gastoHoje += valor;
                     if(dataRegistro.getMonth() === mesAtual && dataRegistro.getFullYear() === anoAtual && r.tipo === "Pagar" && r.status === "Pago") gastoMes += valor;
                 });
                 
@@ -2432,7 +2526,7 @@ function exportarExcel() {
     if(dataFiltroAtivo) {
         listaExportar = listaExportar.filter(r => {
             const dataRegistro = new Date(r.data + 'T12:00:00');
-            return dataRegistro >= dataInicioFiltro && dataRegistro <= dataFimFiltro;
+            return dataRegistro >= dataInicioFiltro && dataRegistro <= dataFiltroFim;
         });
     }
 
@@ -2517,12 +2611,26 @@ document.getElementById("btnFiltrarFav").addEventListener("click", function() {
     aplicarFiltros();
 });
 
+document.getElementById("categoria").addEventListener("change", function() {
+    // Adiciona uma sugestão de meta para o campo de registro
+    const indicator = document.getElementById("categoryMetaIndicator");
+    const cat = this.value;
+    if(metasPorCategoria[cat]) {
+        indicator.innerText = `Meta: ${formatarMoeda(metasPorCategoria[cat])} (clique em Meta de Gastos para editar)`;
+    } else {
+        indicator.innerText = '';
+    }
+});
+
+
 document.getElementById("descricao").addEventListener("input", function() {
     const categoriaAtual = document.getElementById("categoria").value;
     if(!categoriaAtual || categoriaAtual === 'Selecione a Categoria') {
         const categoriaSugerida = aplicarRegrasAutomacao(this.value, null);
         if(categoriaSugerida) {
             document.getElementById("categoria").value = categoriaSugerida;
+            // Dispara o evento de mudança após a sugestão
+            document.getElementById("categoria").dispatchEvent(new Event('change'));
         }
     }
 });
@@ -2546,13 +2654,15 @@ applyTheme();
 toggleParcelaRecorrente();
 atualizarCardObjetivo();
 
+// Sincronização automática a cada 10 segundos
 setInterval(() => {
     if(usuarioAutenticado) {
         carregarRegistros();
-        console.log("↻ Sincronizando...");
+        console.log("↻ Sincronizando automaticamente...");
     }
 }, 10000);
 </script>
+
 
 </body>
 </html>
