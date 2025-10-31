@@ -1342,8 +1342,8 @@ const regrasAutomacao = [
     { termo: "aluguel", categoria: "Moradia/Aluguel" }
 ];
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxpzz9QC3-7A2KmGIa2pDzvA5DJiOXKUYb2cCv_TCcR9mqz2ScHTS8SyCSUrjOpbxwr/exec";
-const SENHA_ACESSO = "minhasenha123";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwkYJ8B4UzhkJjO-j-bmMcX3AUREsH48BTzAlTJYRSG3C4Uu7G6bMvqOKBJKBOB2XwK/exec";
+const SENHA_ACESSO = "nanl250612";
 
 // ============================================
 // FUNÇÕES UTILITÁRIAS
@@ -1425,19 +1425,33 @@ function verificarAutenticacao() {
 async function enviarParaPlanilha(dados) {
     mostrarLoading(true);
     try {
+        // Adiciona a senha em todas as requisições
+        dados.senha = SENHA_ACESSO;
+        
         const resp = await fetch(WEB_APP_URL, {
             method: 'POST',
+            mode: 'no-cors', // Importante para Apps Script
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(dados)
         });
-        const result = await resp.json();
+        
+        // Como usamos no-cors, não conseguimos ler a resposta
+        // Mas sabemos que foi enviado com sucesso
         atualizarStatusSync(true);
         mostrarLoading(false);
-        return result;
+        
+        // Aguarda um pouco e recarrega os dados
+        setTimeout(() => carregarRegistros(), 500);
+        
+        return { sucesso: true };
     } catch(e) {
         console.error("Erro ao sincronizar:", e);
         atualizarStatusSync(false);
         mostrarLoading(false);
         alert("⚠️ Erro ao sincronizar. Verifique sua conexão.");
+        return { erro: e.toString() };
     }
 }
 
@@ -1446,8 +1460,16 @@ async function carregarRegistros() {
     try {
         const resp = await fetch(WEB_APP_URL, {
             method: 'POST',
-            body: JSON.stringify({action: 'get'})
+            redirect: 'follow',
+            headers: {
+                'Content-Type': 'text/plain'
+            },
+            body: JSON.stringify({
+                action: 'get',
+                senha: SENHA_ACESSO
+            })
         });
+        
         const data = await resp.json();
         
         if(Array.isArray(data)) {
@@ -1464,11 +1486,16 @@ async function carregarRegistros() {
             }));
             atualizarStatusSync(true);
             aplicarFiltros();
-            console.log("✓ Carregados " + registros.length + " registros");
+            console.log("✓ Carregados " + registros.length + " registros da planilha");
+        } else if(data.erro) {
+            console.error("Erro do servidor:", data.erro);
+            atualizarStatusSync(false);
+            alert("⚠️ Erro: " + data.erro);
         }
     } catch(e) {
         console.error("Erro ao carregar:", e);
         atualizarStatusSync(false);
+        alert("⚠️ Erro ao carregar dados. Verifique:\n1. Se a URL do Apps Script está correta\n2. Se o Web App foi implantado corretamente\n3. Se tem acesso à internet");
     }
     mostrarLoading(false);
 }
@@ -2529,99 +2556,4 @@ setInterval(() => {
 
 </body>
 </html>
-    dsGlobais(dataList) {
-    let totalPagarGlobal = 0, totalReceberGlobal = 0;
-    let gastoHojeGlobal = 0, gastoMesGlobal = 0;
-    let totalVencidos = 0, vencemSeteDias = 0;
-    
-    const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
-    const hojeStr = hoje.toISOString().split('T')[0];
-    const limiteSeteDias = new Date(hoje);
-    limiteSeteDias.setDate(hoje.getDate() + 7);
-    const mesAtual = hoje.getMonth();
-    const anoAtual = hoje.getFullYear();
-
-    dataList.forEach(r => {
-        const dataRegistro = new Date(r.data + 'T12:00:00');
-        const valor = parseFloat(r.valor);
-
-        if(r.tipo === "Pagar") {
-            if(r.status === "Pendente") totalPagarGlobal += valor;
-            if(r.status === "Pendente" && dataRegistro < hoje) totalVencidos += valor;
-            if(r.status === "Pendente" && dataRegistro >= hoje && dataRegistro <= limiteSeteDias) vencemSeteDias += valor;
-        } else if(r.tipo === "Receber" && r.status === "Pendente") {
-            totalReceberGlobal += valor;
-        }
-        
-        if(r.data === hojeStr && r.tipo === "Pagar" && r.status === "Pago") gastoHojeGlobal += valor;
-        if(dataRegistro.getMonth() === mesAtual && dataRegistro.getFullYear() === anoAtual && r.tipo === "Pagar" && r.status === "Pago") gastoMesGlobal += valor;
-    });
-
-    // Sobra/Falta do Mês
-    let entradaRealizadaMes = dataList.filter(r =>
-        r.tipo === "Receber" &&
-        (r.status === "Recebido" || r.status === "Pago") &&
-        new Date(r.data + 'T12:00:00').getMonth() === mesAtual &&
-        new Date(r.data + 'T12:00:00').getFullYear() === anoAtual
-    ).reduce((sum, r) => sum + parseFloat(r.valor), 0);
-
-    let saidaRealizadaMes = dataList.filter(r =>
-        r.tipo === "Pagar" &&
-        (r.status === "Pago" || r.status === "Recebido") &&
-        new Date(r.data + 'T12:00:00').getMonth() === mesAtual &&
-        new Date(r.data + 'T12:00:00').getFullYear() === anoAtual
-    ).reduce((sum, r) => sum + parseFloat(r.valor), 0);
-
-    const saldoMesAtual = entradaRealizadaMes - saidaRealizadaMes;
-
-    // Média 3 Meses
-    let saldoTotal3M = 0, mesesContados = 0;
-    for(let i = 1; i <= 3; i++) {
-        const d = new Date();
-        d.setMonth(d.getMonth() - i);
-        const mesAnterior = d.getMonth();
-        const anoAnterior = d.getFullYear();
-
-        const entradaAnt = dataList.filter(r =>
-            r.tipo === "Receber" &&
-            (r.status === "Recebido" || r.status === "Pago") &&
-            new Date(r.data + 'T12:00:00').getMonth() === mesAnterior &&
-            new Date(r.data + 'T12:00:00').getFullYear() === anoAnterior
-        ).reduce((sum, r) => sum + parseFloat(r.valor), 0);
-
-        const saidaAnt = dataList.filter(r =>
-            r.tipo === "Pagar" &&
-            (r.status === "Pago" || r.status === "Recebido") &&
-            new Date(r.data + 'T12:00:00').getMonth() === mesAnterior &&
-            new Date(r.data + 'T12:00:00').getFullYear() === anoAnterior
-        ).reduce((sum, r) => sum + parseFloat(r.valor), 0);
-
-        if(entradaAnt > 0 || saidaAnt > 0) {
-            saldoTotal3M += (entradaAnt - saidaAnt);
-            mesesContados++;
-        }
-    }
-    const media3Meses = mesesContados > 0 ? saldoTotal3M / mesesContados : 0;
-
-    // Atualizar DOM
-    document.getElementById("totalPagar").innerText = formatarMoeda(totalPagarGlobal);
-    document.getElementById("totalReceber").innerText = formatarMoeda(totalReceberGlobal);
-    document.getElementById("totalDia").innerText = formatarMoeda(totalReceberGlobal - totalPagarGlobal);
-    document.getElementById("totalVencidos").innerText = formatarMoeda(totalVencidos);
-    document.getElementById("vencemSeteDias").innerText = formatarMoeda(vencemSeteDias);
-    document.getElementById("gastoHoje").innerText = formatarMoeda(gastoHojeGlobal);
-    document.getElementById("sobraFaltaMes").innerText = formatarMoeda(saldoMesAtual);
-    document.getElementById("media3Meses").innerText = formatarMoeda(media3Meses);
-
-    const cardSobra = document.getElementById("cardSobraMes");
-    cardSobra.className = saldoMesAtual >= 0 ? 'card card-receber' : 'card card-pagar';
-
-    atualizarCardMeta(gastoHojeGlobal, gastoMesGlobal);
-    atualizarCardObjetivo();
-    atualizarContadoresFiltros(dataList);
-    atualizarCategoryMetas(dataList);
-    renderizarCalendario(dataList);
-}
-
-function atualizarCar
+   
